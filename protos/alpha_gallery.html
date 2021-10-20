@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<!-- Javascript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var i = 0;
+        $("button").click(function() {
+        	document.getElementById("header").innerHTML = "Your NFTs";
+            const imageDirectory = "";
+            // const images = ["alligator.png", "bat.png", "cat.png", "dog.png"];
+            const images = ["https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
+					        "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
+					        "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
+					        "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU"]
+
+            for (let file in images) {
+                var img = new Image();
+                const width = 1248;
+                const height = 1690;
+                const scalingFactor = 0.1;
+                img.setAttribute("height", scalingFactor*height);
+                img.setAttribute("width", scalingFactor*width);
+                img.classList.add("img-styling");
+                
+                idString = i.toString();
+                img.setAttribute("id", idString);
+                img.addEventListener("click", function(e) {
+                    // document.getElementById("gallery").innerHTML = e.target.id.toString();
+                    new_img = new Image();
+                    new_img.setAttribute("height", scalingFactor*height);
+                    new_img.setAttribute("width", scalingFactor*width);
+                    new_img.classList.add("img-styling");
+                    new_img.src = images[file];
+                    document.getElementById("photo-list").appendChild(new_img);
+                });
+                i += 1;
+
+                img.src = images[file];
+                document.getElementById("image-container").appendChild(img);
+            }
+        });
+    });
+</script>
+
+<!-- CSS -->
+<style>
+:root {
+    --selector-width: 30%;
+    --buffer-width: 5px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    max-height: 100vh;
+    background-color: #eeeeee;
+}
+
+h1, p {
+    color: white;
+    font-family: Helvetica;
+}
+
+.button {
+  background-color: #4CAF50; /* green */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.img-styling {
+    margin: 10px;
+    border-radius: 5px;
+    transition: .95s ease;
+}
+
+img:hover {
+    opacity: 0.6;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: black;
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #dddddd; 
+}
+
+#selector {
+    position: fixed;
+    float: left;
+    overflow-y: auto;
+
+    height: 100%;
+    width: var(--selector-width);
+    
+    background: black;
+}
+
+#scrollbar-buffer {
+    position: fixed;
+    left: var(--selector-width);
+    width: var(--buffer-width);
+    height: 100%;
+    background-color: black;
+}
+
+#gallery-container {
+    position: fixed;
+    left: calc(var(--selector-width) + var(--buffer-width));
+    width: calc(100% - var(--selector-width) - var(--buffer-width));
+    height: 100%;
+    display: table;
+}
+
+#gallery {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+</style>
+
+<!-- HTML -->
+<body>
+<div>
+<div id="selector">
+
+<center>
+<br>
+<h1 id="header">Your NFTs</h1>
+<br>
+<button class="button">
+    See more
+</button>
+
+<br>
+<br>
+<br>
+
+<div id="image-container"></div>
+</center>
+
+</div>
+
+<div id="scrollbar-buffer">
+</div>
+
+<div id="gallery-container">
+    <center id="gallery">
+    <div id="photo-list"></div>
+    </center>
+</div>
+
+</body>
