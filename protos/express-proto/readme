@@ -1,0 +1,16 @@
+These instructions will get server.js working on your computer.
+
+Install node.js here with the default settings:
+https://nodejs.org/en/download/
+
+Run npm --h to ensure that npm has been installed correctly.
+
+Run these commands in terminal to install the necessary packages:
+npm install express --save
+npm install ejs --save
+npm install cookie-parser --save
+
+Finally, run:
+node server.js
+
+The server should be on port 8080.
