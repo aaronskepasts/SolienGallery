@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<!-- Javascript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   // Sets the action of the form after submission.
+   function update_action() {
+      document.getElementById("create-button").action = "/download";
+   }
+
+	function add_img(img_url) {
+      $("#create-button").css("display", "inline-block");
+		new_img = new Image();
+      new_img.classList.add("nft-img");
+      new_img.src = img_url;
+      document.getElementById("photo-list").appendChild(new_img);
+	}
+
+   function setup() { }
+
+   $(document).ready(setup);
+</script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+<%- include("../partials/css_style") %>
+
+<!-- HTML -->
+<body>
+<div class="container-fluid">
+   <div class="row">
+      <!-- Sidebar -->
+      <div class="col-3 px-1 bg-dark position-fixed" id="sticky-sidebar">
+         <ul class="list-group bg-dark">
+            <li class="list-group-item bg-dark border-0">
+               <center>
+                  <h1 id="header">Account: <%= name %></h1>
+                  <hr>
+               </center>
+            </li>
+            <!-- Image List -->
+            <li class="list-group-item bg-dark border-0" id="image-container">
+                  <center>
+                     <% for (let i = 0; i < searchRes.nftList.length; i++) { %>
+                        <img class="selection-img"
+                             id="<%= i %>"
+                             src="<%= searchRes.nftList[i].getImgUrl() %>"
+                             onclick="add_img('<%= searchRes.nftList[i].getImgUrl() %>')">
+                     <% } %>
+                  </center>
+            </li>
+         </ul>
+      </div>
+      <!-- Gallery -->
+      <div id="gallery-container" class="col offset-3">
+         <center id="gallery">
+            <div id="photo-list"></div>
+            <br>
+            <form id="create-button" style="display: none;" onsubmit="update_action()" method="get">
+               <input type="submit" class="button" value="Create Gallery">
+            </form>
+         </center>
+      </div>
+   </div>
+</div>
+</body>
