@@ -1,0 +1,72 @@
+<style>
+:root {
+   --width: 1248px;
+   --height: 1690px;
+   --scaling-factor: 0.1;
+}
+
+body { background-color: #f8f9fa; }
+
+h1 {
+   color: white;
+   font-size: 26px;
+}
+
+hr {
+   border: 0;
+   height: 0.1px;
+   width: 50%;
+   background-color: white;
+}
+
+::-webkit-scrollbar { width: 10px; }
+
+::-webkit-scrollbar-thumb {
+   background: white;
+   border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover { background: #dddddd; }
+
+::-webkit-scrollbar-track { border-radius: 10px; }
+
+#sticky-sidebar {
+   min-width: 225px;
+   height: 100%;
+   padding: 20px;
+   display: flex;
+}
+
+#image-container { overflow: auto; }
+
+.nft-img, .selection-img {
+   height: calc(var(--height) * var(--scaling-factor));
+   width: calc(var(--width) * var(--scaling-factor));
+   margin: 10px;
+   border-radius: 5px;
+   transition: .95s ease;
+}
+
+.selection-img:hover { opacity: 0.6; }
+
+#gallery-container {
+   height: 100vh;
+   display: table;
+}
+
+#gallery {
+   display: table-cell;
+   vertical-align: middle;
+}
+
+.button {
+   background-color: #222222; /* black */
+   border: none;
+   border-radius: 4px;
+   color: white;
+   padding: 12px 25px;
+   text-align: center;
+   display: inline-block;
+   font-size: 16px;
+}
+</style>

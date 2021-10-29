@@ -1,5 +1,7 @@
 const sol_util = require('./solana_util');
 
+/*--------------------------------------------------------------------*/
+
 // Returns a list of 20 hard-coded Solana NFT objects.
 // TODO: This function should return the response after a query to the
 //       blockchain.

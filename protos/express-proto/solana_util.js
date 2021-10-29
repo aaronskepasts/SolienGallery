@@ -2,13 +2,13 @@
 // TODO: This class needs to be finalized.
 class SolanaNFT {
 	// Construct an NFT from an image URL.  
-	constructor(img_url) {
-		this.img_url = img_url;
+	constructor(imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	// Return the image URL associated with the NFT.
-	img_url() {
-		return this.img_url;
+	getImgUrl() {
+		return this.imgUrl;
 	}
 }
 

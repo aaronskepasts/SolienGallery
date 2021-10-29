@@ -5,42 +5,41 @@
    // Sets the action of the form after submission.
    function update_action() {
       wallet = document.getElementById("wallet").value;
-      document.getElementById("form").action = 
-         wallet ? ("/alpha_gallery/" + wallet) : "/";
+      document.getElementById("form").action = wallet ? ("/alpha_gallery/" + wallet) : "/";
    }
 </script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+<head>
+   <%- include("../partials/head") %>
+</head>
+
 <style>
-  body { padding-top:50px; }
-  .button {
-     background-color: #161c2d; /* black */
-     border: none;
-     border-radius: 4px;
-     color: white;
-     padding: 3px 7px;
-     text-align: center;
-     display: inline-block;
-     font-size: 16px;
+   .button {
+      background-color: #222222; /* black */
+      border: none;
+      border-radius: 4px;
+      color: white;
+      padding: 3px 7px;
+      text-align: center;
+      display: inline-block;
+      font-size: 16px;
    }
 </style>
 
 <body class="container">
    <header>
-   <nav class="navbar navbar-dark bg-dark rounded">
-      <h1 class="navbar-brand">Solien Gallery</h1>
-   </nav>
-</header>
-<main>
-   <center class="jumbotron">
-      <form id="form" onsubmit="update_action()" method="get">
-         <input type="text" id="wallet" placeholder="Wallet Number">
-         <input type="submit" class="button" value="Find Your NFTs">
-      </form>
-   </center>
-</main>
+      <%- include("../partials/header") %>
+   </header>
+   <main>
+      <center class="jumbotron">
+         <form id="form" onsubmit="update_action()" method="get">
+            <input type="text" id="wallet" placeholder="Wallet Number">
+            <input type="submit" class="button" value="Find Your NFTs">
+         </form>
+      </center>
+   </main>
 
-<footer>
-   <p class="text-center text-muted">&copy; Copyright 2021 Bob Dondero</p>
-</footer>
+   <footer>
+      <%- include("../partials/footer") %>
+   </footer>
 </body>
