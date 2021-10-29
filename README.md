@@ -6,8 +6,8 @@
 https://nodejs.org/en/download/
 
 ### Run the following commands in terminal:
-`npm install express --save`
-`npm install ejs --save`
+`npm install express --save` <br />
+`npm install ejs --save` <br />
 `npm install cookie-parser --save`
 
 ### Run the server:
