@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head>
+   {% include "views/partials/head.html" %}
+</head>
+
+<style>
+   .button {
+      background-color: #222222; /* black */
+      border: none;
+      border-radius: 4px;
+      color: white;
+      padding: 3px 7px;
+      text-align: center;
+      display: inline-block;
+      font-size: 16px;
+   }
+</style>
+
+<body class="container">
+   <header>
+      {% include "views/partials/header.html" %}
+   </header>
+
+   <main>
+      <center class="jumbotron">
+         <h2><a href="/download">Download Your Gallery</a></h2>
+      </center>
+   </main>
+
+   <footer>
+      {% include "views/partials/footer.html" %}
+   </footer>
+</body>

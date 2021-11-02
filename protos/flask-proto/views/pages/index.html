@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   // Sets the action of the form after submission.
+   function update_action() {
+      wallet = document.getElementById("wallet").value;
+      req_url = "/alpha_gallery/" + wallet;
+      document.getElementById("form").action = wallet ? req_url : "/";
+   }
+</script>
+
+<head>
+   {% include "views/partials/head.html" %}
+</head>
+
+<style>
+   .button {
+      background-color: #222222; /* black */
+      border: none;
+      border-radius: 4px;
+      color: white;
+      padding: 3px 7px;
+      text-align: center;
+      display: inline-block;
+      font-size: 16px;
+   }
+</style>
+
+<body class="container">
+   <header>
+      {% include "views/partials/header.html" %}
+   </header>
+   <main>
+      <center class="jumbotron">
+         <form id="form" onsubmit="update_action()" method="get">
+            <input type="text" id="wallet" placeholder="Wallet Number">
+            <input type="submit" class="button" value="Find Your NFTs">
+         </form>
+      </center>
+   </main>
+
+   <footer>
+      {% include "views/partials/footer.html" %}
+   </footer>
+</body>

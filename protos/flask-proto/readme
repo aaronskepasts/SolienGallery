@@ -1,0 +1,14 @@
+These instructions will get server.js working on your computer.
+
+Install Python here with the default settings:
+https://www.python.org/downloads/
+
+Run python --h to ensure that Python has been installed correctly.
+
+Run these commands in terminal to install the necessary packages:
+pip install flask
+
+Finally, run:
+pytohn runserver.py 8080
+
+The server should be on port 8080.
