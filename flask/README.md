@@ -6,7 +6,9 @@
 https://www.python.org/downloads/
 
 ### Run the following commands in terminal:
-`pip install flask`
+`pip install flask` <br />
+`pip install theblockchainapi` <br />
+`pip install imageio`
 
 ### Run the server:
 `python runserver.py 8080`
