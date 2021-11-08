@@ -7,11 +7,11 @@ from backend.solana_util import SearchRequest, SearchResponse, SolanaNFT
 #-----------------------------------------------------------------------
 
 app = Flask(__name__, template_folder=".")
-frontend_path = "frontend/views/pages/"
+frontend_path = "frontend/pages/"
 
 #-----------------------------------------------------------------------
 
-# Render and return the homepage.
+# Renders and returns the homepage.
 @app.route("/", methods=["GET"])
 @app.route("/index", methods=["GET"])
 def index():
@@ -21,7 +21,7 @@ def index():
 
 #-----------------------------------------------------------------------
 
-# Render and return the download page.
+# Renders and returns the download page.
 @app.route("/download", methods=["GET"])
 def download():
     html = render_template(frontend_path + "download.html")
@@ -30,7 +30,7 @@ def download():
 
 #-----------------------------------------------------------------------
 
-# Render and return the gallery builder page.
+# Renders and returns the gallery builder page.
 @app.route("/alpha_gallery/<wallet>", methods=["GET"])
 def alpha_gallery(wallet):
     search_req = SearchRequest(wallet)
