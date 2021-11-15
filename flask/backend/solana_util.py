@@ -1,4 +1,4 @@
-import urllib.request, json, os
+import urllib.request, json
 
 #-----------------------------------------------------------------------
 
@@ -32,11 +32,8 @@ class SearchResponse:
 	def __init__(self, nft_list):
 		self.nft_list = nft_list
 
-
-
 def query_soliens(nft_addresses):
-	cwd = os.getcwd()
-	with open(cwd + '/backend/solien_addresses.json') as solien_address:
+	with open('backend/solien_addresses.json') as solien_address:
 	    soliens = json.load(solien_address)
 	solien_addresses = [nft for nft in nft_addresses if nft in soliens]
 	return solien_addresses
