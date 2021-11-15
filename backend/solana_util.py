@@ -32,7 +32,6 @@ class SearchResponse:
 	def __init__(self, nft_list):
 		self.nft_list = nft_list
 
-
 def query_soliens(nft_addresses):
 	with open('backend/solien_addresses.json') as solien_address:
 	    soliens = json.load(solien_address)
