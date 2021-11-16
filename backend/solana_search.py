@@ -14,12 +14,21 @@ BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 #-----------------------------------------------------------------------
 
 def search(request):
-	try:
-		assert MY_API_KEY_ID is not None
-		assert MY_API_SECRET_KEY is not None
-	except AssertionError:
-		raise Exception("API keypair is broken")
+	if request.wallet == "aaron":
+		nft_list = []
+		address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+		metadata = {
+			"data": { 
+				"name": "Solien #582", 
+				"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
+				"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+			}
+		}
 
+		for i in range(10):
+			nft_list.append(SolanaNFT(address, metadata))
+
+		return SearchResponse(nft_list)
 
 	# get all NFTs from given wallet
 	# e.g. public_key = "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"
@@ -29,7 +38,6 @@ def search(request):
 		public_key,
 		network=SolanaNetwork.MAINNET_BETA
 	)
-
 
 	# filter out non-Solien NFTs
 	# fill in this list
