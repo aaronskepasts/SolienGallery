@@ -3,9 +3,18 @@
 <!-- Javascript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+
+   let walletImages = [];
+   let galleryImages = [];
    // Sets the action of the form after submission.
    function update_action() {
-      document.getElementById("create-button").action = "/download";
+      for (let i = 0; i < galleryImages.length; i++) {
+         console.log("Images");
+         console.log(galleryImages[i]);
+         console.log(galleryImages[i].src);
+      }
+      return galleryImages;
+      //document.getElementById("create-button").action = "/download";
    }
    let i = 0;
    function add_img(img_url, id) {
@@ -18,14 +27,37 @@
          document.getElementById(id).style.visibility = "visible";
          new_img.parentNode.removeChild(new_img);
          i = i-1;
+         walletImages.push(document.getElementById(id));
+         galleryImages.pop(document.getElementById(id));
+         console.log("Gallery remove");
+         console.log("Gallery Length");
+         console.log(galleryImages.length);
+         console.log("Wallet Length");
+         console.log(walletImages.length);
       }
+      
       new_img.src = img_url;
       var x = document.getElementById("photo-list").appendChild(new_img);
       document.getElementById(id).style.visibility = "hidden";
+      galleryImages.push(document.getElementById(id));
+      walletImages.pop(document.getElementById(id));
       i = i+1;
+      console.log("Gallery Add");
+      console.log("Gallery Length");
+      console.log(galleryImages.length);
+      console.log("Wallet Length");
+      console.log(walletImages.length);
       }
-   }
 
+     
+
+      
+   }
+   
+   function initialize(walletItem) {
+         walletImages.push(walletItem);
+         console.log(walletImages.length);
+      }
 
    function setup() { }
 
@@ -53,10 +85,14 @@
             <li class="list-group-item bg-dark border-0" id="image-container">
                   <center>
                      {% for i in range(search_res.nft_list|length()) %}
-                        <img class="selection-img"
+                     <img class="selection-img"
                              id="{{ i }}"
                              src="{{ search_res.nft_list[i].get_img_url() }}"
                              onclick="add_img('{{ search_res.nft_list[i].get_img_url() }}', id)">
+                     <script type="text/javascript">
+                        initialize(document.getElementById(i));
+                     </script>
+                        
                      {% endfor %}
                   </center>
             </li>
@@ -74,8 +110,8 @@
                </div>
             <br>
             <br>
-            <form id="create-button" style="display: none;" onsubmit="update_action()" method="get">
-               <input type="submit" class="button" value="Create Gallery">
+            <form id="create-button" style="display: none;" onsubmit="return false">
+               <input type="button" class="button" value="Create Gallery" onclick="update_action()">
             </form>
          </center>
             
