@@ -9,7 +9,8 @@ def generate_gallery(request):
     background_img = request.get_background_img()
     if background_img == None:
         background_img = Image()
-        background_img.generate((1500, 500), color=0xf8f9fa)
+        background_img.load("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500")
+        #background_img.generate((1500, 500), color=0xf8f9fa)
 
     # Rescale the NFT images.
     for img in nft_imgs:
