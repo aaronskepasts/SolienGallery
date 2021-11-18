@@ -13,60 +13,52 @@
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
          galleryUrls[i] = url.substring(url.lastIndexOf('/')+1);
-         console.log(galleryUrls[i]);
          submittable = submittable + "=" + galleryUrls[i];      
       }
      
-
-      console.log(submittable);
-      //for (let i = 0; i < 20000; i++) {
-      //   console.log(submittable);    
-      //}
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
 
       document.getElementById("create-button").action = submittable;
-   }
-
-   function gotodownload(){
-      document.getElementById("create-button").action = "/download";
    }
 
    let i = 0;
    function add_img(img_url, id) {
       if (i < 4){
       $("#create-button").css("display", "inline-block");
+      // creates new image for gallery
       new_img = new Image();
-      new_img.classList.add("nft-img");
-      new_img.onclick = function(){
-         console.log("sortof");
-         document.getElementById(id).style.visibility = "visible";
-         new_img.parentNode.removeChild(new_img);
-         i = i-1;
-         walletImages.push(document.getElementById(id));
-         galleryImages.pop(document.getElementById(id));
-         console.log("Gallery remove");
-         console.log("Gallery Length");
-         console.log(galleryImages.length);
-         console.log("Wallet Length");
-         console.log(walletImages.length);
-      }
       
+      new_img.classList.add("nft-img");
+      new_img.id = id+"gallery";
       new_img.src = img_url;
-      var x = document.getElementById("photo-list").appendChild(new_img);
-      document.getElementById(id).style.visibility = "hidden";
+      new_img.addEventListener('click', function(){addToGallery(id, img_url);});
+      
+      document.getElementById("photo-list").appendChild(new_img);
+      
+      // ajusts tracker structures
       galleryImages.push(document.getElementById(id));
       walletImages.pop(document.getElementById(id));
       i = i+1;
-      console.log("Gallery Add");
-      console.log("Gallery Length");
-      console.log(galleryImages.length);
-      console.log("Wallet Length");
-      console.log(walletImages.length);
+      console.log(i);
+      console.log(document.getElementById(id).parentNode);
+      document.getElementById(id).parentNode.removeChild(document.getElementById(id));
       }
+   }
 
-     
-
+   function addToGallery(id, url) {
+      console.log("yeet");
+      document.getElementById(id +"gallery").parentNode.removeChild(document.getElementById(id+"gallery"));
+      walletImages.push(document.getElementById(id));
+      galleryImages.pop(document.getElementById(id));
+      i = i-1;
       
+      new_img = new Image();
+      new_img.classList.add("selection-img");
+      new_img.id = id;
+      new_img.src = url;
+      new_img.addEventListener('click', function(){add_img(url, id);});
+      document.getElementById('temp').appendChild(new_img);
+                           
    }
    
    function initialize(walletItem) {
@@ -98,7 +90,7 @@
             </li>
             <!-- Image List -->
             <li class="list-group-item bg-dark border-0" id="image-container">
-                  <center>
+                  <center id = temp>
                      {% for i in range(search_res.nft_list|length()) %}
                      <img class="selection-img"
                              id="{{ i }}"
@@ -107,7 +99,6 @@
                      <script type="text/javascript">
                         initialize(document.getElementById(i));
                      </script>
-                        
                      {% endfor %}
                   </center>
             </li>
@@ -115,22 +106,24 @@
       </div>
       <!-- Gallery -->
       <div id="gallery-container" class="col offset-3">
+
          <center id="gallery">
             <br>
             <br>
+            <center>
                <div id="photo-list">
-                  <br>
-                  <br>
-                  <br>
+
                </div>
+            </center>
             <br>
             <br>
-            
             <form id="create-button" style="display: none;" onsubmit="update_action()" method="get">
                <input type="submit" class="button" value="Create Gallery">
             </form>
          </center>
-            
+         
+      
+         
          
       </div>
    </div>
