@@ -1,5 +1,14 @@
 <!DOCTYPE html>
+<script>
+   // array of gallery urls
+   let galleryUrls = JSON.parse(sessionStorage.getItem("gal"));
+   console.log("passed images");
+   for (let i = 0; i < galleryUrls.length; i++) {
+         console.log("image: " + i);
+         console.log(galleryUrls[i]);
+   }
 
+</script>
 <head>
    {% include "frontend/partials/head.html" %}
 </head>

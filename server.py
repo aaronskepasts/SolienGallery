@@ -1,5 +1,5 @@
 from sys import stderr
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, jsonify
 
 from backend.img_util import GalleryRequest, Image
 from backend.img_generate import generate_gallery
@@ -23,8 +23,25 @@ def index():
 #-----------------------------------------------------------------------
 
 # Renders and returns the download page.
-@app.route("/download", methods=["GET"])
-def download():
+@app.route("/download/<string:id>", methods=["GET"])
+def download(id):
+    print(id)
+    print(type(id))
+    urls = id.split('=')
+    ims = list()
+    for i in range(1, len(urls)):
+        iUrl = "https://ipfs.io/ipfs/"+urls[i]
+        print(iUrl)
+        item = Image()
+        item.load(iUrl)
+        ims.append(item)
+    
+    gallery_request = GalleryRequest(ims)
+    """
+
+
+
+    
     nft_url = "https://ipfs.io/ipfs/QmT8TSe4k7qgwxpmvQPZkN7cefJz8RtUR4iDDADXRshu4X"
     nft_img1 = Image()
     nft_img1.load(nft_url)
@@ -33,7 +50,7 @@ def download():
     nft_img3 = Image()
     nft_img3.load(nft_url)
 
-    gallery_request = GalleryRequest([nft_img1, nft_img2, nft_img3])
+    gallery_request = GalleryRequest([nft_img1, nft_img2, nft_img3])"""
     url = generate_gallery(gallery_request)
     html = render_template(frontend_path + "download.html", url=url)
     return make_response(html)

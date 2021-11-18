@@ -6,16 +6,31 @@
 
    let walletImages = [];
    let galleryImages = [];
+   let galleryUrls = [];
    // Sets the action of the form after submission.
    function update_action() {
+      let submittable = "/download/"
       for (let i = 0; i < galleryImages.length; i++) {
-         console.log("Images");
-         console.log(galleryImages[i]);
-         console.log(galleryImages[i].src);
+         let url = galleryImages[i].src;
+         galleryUrls[i] = url.substring(url.lastIndexOf('/')+1);
+         console.log(galleryUrls[i]);
+         submittable = submittable + "=" + galleryUrls[i];      
       }
-      return galleryImages;
-      //document.getElementById("create-button").action = "/download";
+     
+
+      console.log(submittable);
+      //for (let i = 0; i < 20000; i++) {
+      //   console.log(submittable);    
+      //}
+      sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
+
+      document.getElementById("create-button").action = submittable;
    }
+
+   function gotodownload(){
+      document.getElementById("create-button").action = "/download";
+   }
+
    let i = 0;
    function add_img(img_url, id) {
       if (i < 4){
@@ -110,8 +125,9 @@
                </div>
             <br>
             <br>
-            <form id="create-button" style="display: none;" onsubmit="return false">
-               <input type="button" class="button" value="Create Gallery" onclick="update_action()">
+            
+            <form id="create-button" style="display: none;" onsubmit="update_action()" method="get">
+               <input type="submit" class="button" value="Create Gallery">
             </form>
          </center>
             
