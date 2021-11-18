@@ -28,16 +28,23 @@ def search(request):
 		for i in range(10):
 			nft_list.append(SolanaNFT(address, metadata))
 
-		return SearchResponse(nft_list)
+		return "", SearchResponse(nft_list)
 
 	# get all NFTs from given wallet
 	# e.g. public_key = "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"
 	# good public_key = "6KQDNrJoPJRa1UHX7C4Wf5FHgjvnswLMTePyUTySFKeQ"
 	public_key = request.wallet
-	nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
-		public_key,
-		network=SolanaNetwork.MAINNET_BETA
-	)
+	try:
+		nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
+			public_key,
+			network=SolanaNetwork.MAINNET_BETA
+		)
+	except Exception as ex:
+		if "You have run out" in str(ex):
+				error_message = "Cannot process call to blockchain."
+		else:
+			error_message = "The specified wallet number could not be found."
+		return error_message, SearchResponse([])
 
 	# filter out non-Solien NFTs
 	# fill in this list
@@ -46,15 +53,18 @@ def search(request):
 	# create nft objects by searching for metadata at each address
 	# populate nft_list to be converted into a response and returned
 	nft_list = []
-	counter = 0
 	for address in solien_addresses:
-		nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
-			mint_address=address,
-			network=SolanaNetwork.MAINNET_BETA
-		)
-		nft_list.append(SolanaNFT(address, nft_metadata))
-		# counter += 1
-		# if counter == 2:
-		# 	break
+		try:
+			nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
+				mint_address=address,
+				network=SolanaNetwork.MAINNET_BETA
+			)
+			nft_list.append(SolanaNFT(address, nft_metadata))
+		except Exception as ex:
+			if "You have run out" in str(ex):
+				error_message = "Cannot process call to blockchain."
+			else:
+				error_message = "Issue encountered when retrieving an NFT's metadata."
+			return error_message, SearchResponse([])
 
-	return SearchResponse(nft_list)
+	return "", SearchResponse(nft_list)
