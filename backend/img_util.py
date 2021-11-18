@@ -43,8 +43,8 @@ class Image:
 
     # Rescale the dimensions of the image by scale.
     def rescale(self, scale):
-        self.w = round(scale*self.w)
-        self.h = round(scale*self.h)
+        self.w = round(scale * self.w)
+        self.h = round(scale * self.h)
         self.img = self.img.resize((self.w, self.h))
 
     # Overlays other images on top of the image.
@@ -95,4 +95,4 @@ class GalleryResponse:
 
     # Returns the gallery image.
     def get_gallery(self):
-        return img
+        return self.img

@@ -25,32 +25,22 @@ def index():
 # Renders and returns the download page.
 @app.route("/download/<string:id>", methods=["GET"])
 def download(id):
-    print(id)
-    print(type(id))
+    # print(id)
+    # print(type(id))
     urls = id.split('=')
-    ims = list()
+    imgs = []
     for i in range(1, len(urls)):
-        iUrl = "https://ipfs.io/ipfs/"+urls[i]
-        print(iUrl)
-        item = Image()
-        item.load(iUrl)
-        ims.append(item)
+        url = "https://ipfs.io/ipfs/" + urls[i]
+        print(url)
+        nft_img = Image()
+        nft_img.load(url)
+        imgs.append(nft_img)
     
-    gallery_request = GalleryRequest(ims)
-    """
+    background_url = "https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500"
+    background_img = Image()
+    background_img.load(background_url)
+    gallery_request = GalleryRequest(imgs, background_img)
 
-
-
-    
-    nft_url = "https://ipfs.io/ipfs/QmT8TSe4k7qgwxpmvQPZkN7cefJz8RtUR4iDDADXRshu4X"
-    nft_img1 = Image()
-    nft_img1.load(nft_url)
-    nft_img2 = Image()
-    nft_img2.load(nft_url)
-    nft_img3 = Image()
-    nft_img3.load(nft_url)
-
-    gallery_request = GalleryRequest([nft_img1, nft_img2, nft_img3])"""
     url = generate_gallery(gallery_request)
     html = render_template(frontend_path + "download.html", url=url)
     return make_response(html)
