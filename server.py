@@ -9,7 +9,7 @@ from backend.solana_util import SearchRequest, SearchResponse, SolanaNFT
 #-----------------------------------------------------------------------
 
 app = Flask(__name__, template_folder=".")
-frontend_path = "frontend/pages/"
+frontend_path = "templates/"
 
 #-----------------------------------------------------------------------
 
