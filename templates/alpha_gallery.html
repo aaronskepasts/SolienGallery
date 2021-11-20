@@ -3,7 +3,6 @@
 <!-- Javascript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-
    let walletImages = [];
    let galleryImages = [];
    let galleryUrls = [];
@@ -76,6 +75,10 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/gallery_style.css') }}">
 
 <!-- HTML -->
+<head>
+   <title>Gallery Builder</title>
+</head>
+
 <body>
 <div class="container-fluid">
    <div class="row">
@@ -106,7 +109,6 @@
       </div>
       <!-- Gallery -->
       <div id="gallery-container" class="col offset-3">
-
          <center id="gallery">
             <br>
             <br>
@@ -122,10 +124,6 @@
                <input type="submit" class="button" value="Create Gallery">
             </form>
          </center>
-         
-      
-         
-         
       </div>
    </div>
 </div>
