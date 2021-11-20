@@ -1,4 +1,7 @@
-from .solana_util import SearchResponse, SolanaNFT, query_soliens
+import json
+from sys import stderr
+
+from .solana_util import SearchResponse, SolanaNFT
 from theblockchainapi import TheBlockchainAPIResource, SolanaNetwork
 
 #-----------------------------------------------------------------------
@@ -13,58 +16,90 @@ BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 
 #-----------------------------------------------------------------------
 
+# Helper function to parse errors.
+def parse_err(ex):
+	err_message = "A server error has occurred."
+	if "run out" in ex:
+		err_message = "Cannot process call to blockchain."
+	
+	elif "value for public_key" in ex:
+		err_message = "The specified wallet number could not be found."
+	
+	elif "[test]" in ex:
+		err_message = ex[:-6]  # Remove [test] tag.
+
+	return err_message
+
+#-----------------------------------------------------------------------
+
+# Helper function to filter out non-Solien NFTs.
+def query_soliens(nft_addresses):
+	with open('backend/solien_addresses.json') as solien_address:
+	    soliens = json.load(solien_address)
+	solien_addresses = [nft for nft in nft_addresses if nft in soliens]
+	return solien_addresses
+
+#-----------------------------------------------------------------------
+
+# Returns the NFTs owned by the wallet in a given SearchRequest.
 def search(request):
-	if request.wallet == "aaron":
-		nft_list = []
-		address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
-		metadata = {
-			"data": { 
-				"name": "Solien #582", 
-				"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
-				"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
-			}
-		}
-
-		for i in range(10):
-			nft_list.append(SolanaNFT(address, metadata))
-
-		return "", SearchResponse(nft_list)
-
-	# get all NFTs from given wallet
-	# e.g. public_key = "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"
-	# good public_key = "6KQDNrJoPJRa1UHX7C4Wf5FHgjvnswLMTePyUTySFKeQ"
-	public_key = request.wallet
+	# Retrieve the NFTs from the given wallet.
 	try:
+		# Hard-coded error.
+		if request.wallet == "error":
+			raise Exception("Error Message.[test]")
+
+		# Hard-coded general use case.
+		if request.wallet == "aaron":
+			nft_list = []
+			address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+			metadata = {
+				"data": { 
+					"name": "Solien #582", 
+					"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
+					"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+				}
+			}
+
+			for i in range(10):
+				nft_list.append(SolanaNFT(address, metadata))
+
+			return SearchResponse(nft_list)
+
+		# Retrieve the NFTs via a call to the Blockchain API.
+		# Examples:
+		#    "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (aaron)
+		#    "6KQDNrJoPJRa1UHX7C4Wf5FHgjvnswLMTePyUTySFKeQ" (other)
+		public_key = request.wallet
 		nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
 			public_key,
 			network=SolanaNetwork.MAINNET_BETA
 		)
+
 	except Exception as ex:
-		if "You have run out" in str(ex):
-				error_message = "Cannot process call to blockchain."
-		else:
-			error_message = "The specified wallet number could not be found."
-		return error_message, SearchResponse([])
+		print(ex, file=stderr)
+		error_message = parse_err(str(ex))
+		raise Exception(error_message)
 
-	# filter out non-Solien NFTs
-	# fill in this list
-	solien_addresses = query_soliens(nft_addresses)
+	# Return the Solien NFTs.
+	try:
+		# Filter out non-Solien NFT addresses.
+		solien_addresses = query_soliens(nft_addresses)
 
-	# create nft objects by searching for metadata at each address
-	# populate nft_list to be converted into a response and returned
-	nft_list = []
-	for address in solien_addresses:
-		try:
+		# Return the NFTs as custom objects in a SearchResponse.
+		nft_list = []
+		for address in solien_addresses:
+			# Retrieve the metadata at the given address via a call to
+			# the Blockchain API.
 			nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
 				mint_address=address,
 				network=SolanaNetwork.MAINNET_BETA
 			)
 			nft_list.append(SolanaNFT(address, nft_metadata))
-		except Exception as ex:
-			if "You have run out" in str(ex):
-				error_message = "Cannot process call to blockchain."
-			else:
-				error_message = "Issue encountered when retrieving an NFT's metadata."
-			return error_message, SearchResponse([])
 
-	return "", SearchResponse(nft_list)
+		return SearchResponse(nft_list)
+
+	except Exception as ex:
+		print(ex, file=stderr)
+		error_message = parse_err(str(ex))
+		raise Exception(error_message)

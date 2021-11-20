@@ -89,10 +89,10 @@ class GalleryRequest:
 
 # Response containing a gallery image.
 class GalleryResponse:
-    # Constructs a response from a gallery image.
-    def __init__(self, img):
-        self.img = img
+    # Constructs a response from a gallery image URL.
+    def __init__(self, img_url):
+        self.img_url = img_url
 
-    # Returns the gallery image.
+    # Returns the gallery image URL.
     def get_gallery(self):
-        return self.img
+        return self.img_url
