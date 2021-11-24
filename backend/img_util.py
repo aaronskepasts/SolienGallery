@@ -1,7 +1,6 @@
 import cloudinary
 import cloudinary.uploader
 import cloudinary.utils
-
 from io import BytesIO
 from PIL import Image as PilImage 
 import requests

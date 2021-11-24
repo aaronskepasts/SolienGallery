@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   const loadingTexts = ["Contacting Aliens",
+                         "Sending Request to Mars",
+                         "Debunking the Moon Landing",
+                         "Hacking the Mars Rover",
+                         "Contacting the Hubble Telescope",
+                         "Launching Spaceman Shmu"];
+   let ellipsis_call = 0;
+
+   // Randomizes the loading text.
+   function randomizeLoadingText() {
+      randomIndex = Math.floor(Math.random() * loadingTexts.length);
+      $("#loading-text").html(loadingTexts[randomIndex]);
+      ellipsis_call = 0;
+   }
+
+   // Animates the loading text with ellipses, randomizing the displayed
+   // text non-deterministically.
+   function animateLoadingText() {
+      text = $("#loading-text").text();
+      new_text = false;
+      if (ellipsis_call < 3) {
+         $("#loading-text").html(text + ".");
+      }
+      else {
+         new_text = (Math.random() > 0.33);
+         if (new_text) {
+            randomizeLoadingText();
+         }
+         else {
+            $("#loading-text").html(text.substring(0, text.length - 3));
+         }
+      }
+      if (!new_text) {
+         ellipsis_call = (ellipsis_call + 1) % 4;
+      }
+   }
+
+   function setup() {
+      randomizeLoadingText()
+      window.setInterval(animateLoadingText, 400);
+   }
+
+   $(document).ready(setup);
+</script>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+
+<head>
+   <title>Loading Page</title>
+</head>
+
+<div class="showcase">
+   <div class="video-container">
+      <video autoplay muted loop>
+         <source src="https://res.cloudinary.com/dskvzlrpw/video/upload/v1637354076/solien/blue_planet.mp4" type="video/mp4">
+      </video>
+   </div>
+   <div class="content">
+      <center style="padding: 10px">
+         <div class="lds-grid">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+         </div>
+      </center>
+      <h2 id="loading-text"></h2>
+   </div>
+</div>
