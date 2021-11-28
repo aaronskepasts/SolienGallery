@@ -11,8 +11,9 @@
       let submittable = "/download/"
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
-         galleryUrls[i] = url.substring(url.lastIndexOf('/')+1);
-         submittable = submittable + "=" + galleryUrls[i];      
+         galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
+         submittable += (i > 0) ? "=" : "";
+         submittable += galleryUrls[i];      
       }
      
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
@@ -22,22 +23,22 @@
 
    let i = 0;
    function add_img(img_url, id) {
-      if (i < 4){
+      if (i < 4) {
       $("#create-button").css("display", "inline-block");
       // creates new image for gallery
       new_img = new Image();
       
       new_img.classList.add("nft-img");
-      new_img.id = id+"gallery";
+      new_img.id = id + "gallery";
       new_img.src = img_url;
-      new_img.addEventListener('click', function(){addToGallery(id, img_url);});
+      new_img.addEventListener('click', function() { addToGallery(id, img_url); });
       
       document.getElementById("photo-list").appendChild(new_img);
       
       // ajusts tracker structures
       galleryImages.push(document.getElementById(id));
       walletImages.pop(document.getElementById(id));
-      i = i+1;
+      i = i + 1;
       console.log(i);
       console.log(document.getElementById(id).parentNode);
       document.getElementById(id).parentNode.removeChild(document.getElementById(id));
@@ -46,24 +47,24 @@
 
    function addToGallery(id, url) {
       console.log("yeet");
-      document.getElementById(id +"gallery").parentNode.removeChild(document.getElementById(id+"gallery"));
+      document.getElementById(id +"gallery").parentNode.removeChild(document.getElementById(id + "gallery"));
       walletImages.push(document.getElementById(id));
       galleryImages.pop(document.getElementById(id));
-      i = i-1;
+      i = i - 1;
       
       new_img = new Image();
       new_img.classList.add("selection-img");
       new_img.id = id;
       new_img.src = url;
-      new_img.addEventListener('click', function(){add_img(url, id);});
+      new_img.addEventListener('click', function() { add_img(url, id); });
       document.getElementById('temp').appendChild(new_img);
                            
    }
    
    function initialize(walletItem) {
-         walletImages.push(walletItem);
-         console.log(walletImages.length);
-      }
+      walletImages.push(walletItem);
+      console.log(walletImages.length);
+   }
 
    function setup() { }
 
@@ -93,12 +94,12 @@
             </li>
             <!-- Image List -->
             <li class="list-group-item bg-dark border-0" id="image-container">
-                  <center id = temp>
-                     {% for i in range(search_res.nft_list|length()) %}
+                  <center id="temp">
+                     {% for i in range(search_res|length()) %}
                      <img class="selection-img"
                              id="{{ i }}"
-                             src="{{ search_res.nft_list[i].get_img_url() }}"
-                             onclick="add_img('{{ search_res.nft_list[i].get_img_url() }}', id)">
+                             src="{{ search_res[i] }}"
+                             onclick="add_img('{{ search_res[i] }}', id)">
                      <script type="text/javascript">
                         initialize(document.getElementById(i));
                      </script>
@@ -115,8 +116,7 @@
             <center>
                <br>
                <br>
-               <div id="photo-list">
-               </div>
+               <div id="photo-list"></div>
             </center>
             <br>
             <br>

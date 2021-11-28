@@ -1,15 +1,27 @@
+from rq import Queue
 from sys import stderr
-from flask import Flask, request, make_response, render_template, jsonify
+from flask import Flask, make_response, render_template, request
+from flask import jsonify
 
 from backend.img_util import GalleryRequest, Image
 from backend.img_generate import generate_gallery
 from backend.solana_search import search
 from backend.solana_util import SearchRequest, SearchResponse, SolanaNFT
+from worker import conn
 
 #-----------------------------------------------------------------------
 
+# Flask application.
 app = Flask(__name__, template_folder=".")
+
+# Path to front-end templates.
 frontend_path = "templates/"
+
+# URL pattern for Solien images.
+ipfs_url = "https://ipfs.io/ipfs/"
+
+# Queue for background tasks.
+q = Queue(connection=conn)
 
 #-----------------------------------------------------------------------
 
@@ -30,12 +42,54 @@ def index():
 
 #-----------------------------------------------------------------------
 
-# Renders and returns the homepage.
-@app.route("/loading/<string:wallet>", methods=["GET"])
-def loading(wallet):
+# Returns the ID of the background task querying for the given wallet.
+@app.route("/enqueue_search/<string:wallet>", methods=["GET"])
+def enqueue_search(wallet):
     try:
-        print(wallet)
-        html = render_template(frontend_path + "loading.html")
+        search_req = SearchRequest(wallet)
+        job = q.enqueue(search, search_req)
+        return job.get_id()
+
+    except Exception as ex:
+        print(ex, file=stderr)
+        error_message = "A server error has occurred."
+        html = render_template(frontend_path + "error.html",
+                               error_message=error_message)
+        return make_response(html)
+
+#-----------------------------------------------------------------------
+
+# Helper function to format the details of a background task in JSON.
+def format_task_details(status, response):
+    return jsonify({"status": status, "response": response})
+
+# Returns the status of the job with the given ID.
+@app.route("/status/<string:job_id>", methods=["GET"])
+def job_status(job_id):
+    try:
+        job = q.fetch_job(job_id)
+        if not job:
+            return format_task_details("unknown", "")
+        elif not job.result:
+            return format_task_details(job.get_status(), "")
+        return format_task_details(job.get_status(), job.result.json())
+
+    except Exception as ex:
+        print(ex, file=stderr)
+        error_message = "A server error has occurred."
+        html = render_template(frontend_path + "error.html",
+                               error_message=error_message)
+        return make_response(html)
+
+#-----------------------------------------------------------------------
+
+# Renders and returns the homepage.
+@app.route("/loading/<string:job_id>", methods=["GET"])
+def loading(job_id):
+    try:
+        job = q.fetch_job(job_id)
+        html = render_template(frontend_path + "loading.html",
+                               job_id=job.get_id())
         return make_response(html)
 
     except Exception as ex:
@@ -48,19 +102,19 @@ def loading(wallet):
 #-----------------------------------------------------------------------
 
 # Renders and returns the gallery builder page.
-@app.route("/alpha_gallery/<string:wallet>", methods=["GET"])
-def alpha_gallery(wallet):
+@app.route("/alpha_gallery/<string:id_strs>", methods=["GET"])
+def alpha_gallery(id_strs):
     try:
-        search_req = SearchRequest(wallet)
-        search_res = search(search_req)
+        imgs = [ipfs_url + img_id for img_id in id_strs.split("=")]
         html = render_template(frontend_path + "alpha_gallery.html",
-                               wallet=wallet, search_res=search_res)
+                               wallet="aaron", search_res=imgs)
         return make_response(html)
 
     except Exception as ex:
         print(ex, file=stderr)
+        error_message = "A server error has occurred."
         html = render_template(frontend_path + "error.html",
-                               error_message=str(ex))
+                               error_message=error_message)
         return make_response(html)
 
 #-----------------------------------------------------------------------
@@ -70,9 +124,8 @@ def alpha_gallery(wallet):
 def download(id_strs):
     try:
         imgs = []
-        for img_id in id_strs.split('=')[1:]:
-            img_url = "https://ipfs.io/ipfs/" + img_id
-            print(img_url)
+        for img_id in id_strs.split('='):
+            img_url = ipfs_url + img_id
             nft_img = Image()
             nft_img.load(img_url)
             imgs.append(nft_img)
@@ -83,8 +136,9 @@ def download(id_strs):
         gallery_request = GalleryRequest(imgs, background_img)
 
         response = generate_gallery(gallery_request)
-        img_url  = response.get_gallery() 
-        html = render_template(frontend_path + "download.html", url=img_url)
+        img_url  = response.get_gallery()
+        html = render_template(frontend_path + "download.html",
+                               url=img_url)
         return make_response(html)
 
     except Exception as ex:

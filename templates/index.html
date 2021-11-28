@@ -2,11 +2,22 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+   // Redirects the page to the appropriate loading screen.
+   function redirectPage(job_id) {
+      window.location.href = "/loading/" + job_id;
+   }
+
    // Sets the action of the form after submission.
-   function update_action() {
-      wallet = document.getElementById("wallet").value;
-      req_url = "/alpha_gallery/" + wallet;
-      document.getElementById("form").action = wallet ? req_url : "/";
+   function enqueue_search() {
+      wallet = $("#wallet")[0].value;
+      if (!wallet) { return; }
+      
+      req_url = "/enqueue_search/" + wallet;
+      $.ajax({
+         type: "GET",
+         url: req_url,
+         success: redirectPage
+      });
    }
 </script>
 
@@ -26,7 +37,7 @@
       <h1>Solien Gallery</h1>
       <h2>A New Way To Showcase Your NFTs</h2>
       <center>
-      <form id="form" onsubmit="update_action()" method="get">
+      <form id="form" onsubmit="enqueue_search()" method="get">
          <table>
             <tr>
                <td><br><input type="text" id="wallet" placeholder="Wallet Number"></td>

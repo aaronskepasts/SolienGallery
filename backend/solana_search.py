@@ -21,13 +21,10 @@ def parse_err(ex):
 	err_message = "A server error has occurred."
 	if "run out" in ex:
 		err_message = "Cannot process call to blockchain."
-
 	elif "value for public_key" in ex:
 		err_message = "The specified wallet number could not be found."
-
 	elif "[test]" in ex:
 		err_message = ex[:-6]  # Remove [test] tag.
-
 	return err_message
 
 #-----------------------------------------------------------------------
@@ -54,6 +51,7 @@ def search(request):
 			nft_list = []
 			address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
 			metadata = {
+				"image": "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
 				"data": {
 					"name": "Solien #582",
 					"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
