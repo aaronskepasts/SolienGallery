@@ -1,0 +1,64 @@
+{
+  "name": "Solien #1467",
+  "description": "Some Soliens are being held in Alien facilities, some in Human facilities, and some are even floating through a cosmic prison. Regardless, they are all holding a special mugshot sign with a message they wish to spread throughout the collective universal consciousness.",
+  "symbol": "SRDT",
+  "seller_fee_basis_points": 1000,
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Human Mugshot"
+    },
+    {
+      "trait_type": "Skin",
+      "value": "Grey"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Red"
+    },
+    {
+      "trait_type": "Jumpsuit",
+      "value": "Tan"
+    },
+    {
+      "trait_type": "Sign",
+      "value": "Normal"
+    },
+    {
+      "trait_type": "Text",
+      "value": "Take Us To Your Degens"
+    },
+    {
+      "trait_type": "Stardust",
+      "value": 0
+    }
+  ],
+  "image": "https://ipfs.io/ipfs/Qmd41FMm5j5Axvy6vHZ7CYDWGdbErxtae9v7pCB9HgbLXk",
+  "properties": {
+    "files": [
+      {
+        "uri": "https://ipfs.io/ipfs/Qmd41FMm5j5Axvy6vHZ7CYDWGdbErxtae9v7pCB9HgbLXk",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "5wk5hoQFXK9bcdyJ8vnuZMVHmZ6mpw1sp5HKyXFWN4MS",
+        "share": 50
+      },
+      {
+        "address": "4gPZmL2kesmv2UYVZ3q7DRKeW8ntZpLHKRGnZrXhCK9b",
+        "share": 16
+      },
+      {
+        "address": "FPYJEyVp4hEGRSiq6ntKkAiNH2c3vix7YgdAR8mYdNzK",
+        "share": 17
+      },
+      {
+        "address": "5J8z8xtc7feoMdw5SkKDVG9kw9S3Lr6bz6zDZAqt6dgq",
+        "share": 17
+      }
+    ],
+    "category": "image"
+  }
+}
