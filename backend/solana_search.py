@@ -98,7 +98,7 @@ def search(request):
 			# 	network=SolanaNetwork.MAINNET_BETA
 			# )
 			cached_nft_location = "cache/soliens/" + address + ".json"
-			with open(nft_cache_location) as metadata_json:
+			with open(cached_nft_location) as metadata_json:
 			    metadata = json.load(metadata_json)
 			nft_list.append(SolanaNFT(address, metadata))
 		return SearchResponse(nft_list)
