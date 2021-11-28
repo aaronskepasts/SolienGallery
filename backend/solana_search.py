@@ -21,10 +21,10 @@ def parse_err(ex):
 	err_message = "A server error has occurred."
 	if "run out" in ex:
 		err_message = "Cannot process call to blockchain."
-	
+
 	elif "value for public_key" in ex:
 		err_message = "The specified wallet number could not be found."
-	
+
 	elif "[test]" in ex:
 		err_message = ex[:-6]  # Remove [test] tag.
 
@@ -34,7 +34,7 @@ def parse_err(ex):
 
 # Helper function to filter out non-Solien NFTs.
 def query_soliens(nft_addresses):
-	with open('backend/solien_addresses.json') as solien_address:
+	with open('cache/solien_addresses.json') as solien_address:
 	    soliens = json.load(solien_address)
 	solien_addresses = [nft for nft in nft_addresses if nft in soliens]
 	return solien_addresses
@@ -54,8 +54,8 @@ def search(request):
 			nft_list = []
 			address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
 			metadata = {
-				"data": { 
-					"name": "Solien #582", 
+				"data": {
+					"name": "Solien #582",
 					"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
 					"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
 				}
@@ -70,6 +70,7 @@ def search(request):
 		# Examples:
 		#    "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (aaron)
 		#    "6KQDNrJoPJRa1UHX7C4Wf5FHgjvnswLMTePyUTySFKeQ" (other)
+
 		public_key = request.wallet
 		nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
 			public_key,
@@ -88,15 +89,18 @@ def search(request):
 
 		# Return the NFTs as custom objects in a SearchResponse.
 		nft_list = []
+
 		for address in solien_addresses:
 			# Retrieve the metadata at the given address via a call to
 			# the Blockchain API.
-			nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
-				mint_address=address,
-				network=SolanaNetwork.MAINNET_BETA
-			)
-			nft_list.append(SolanaNFT(address, nft_metadata))
-
+			# nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
+			# 	mint_address=address,
+			# 	network=SolanaNetwork.MAINNET_BETA
+			# )
+			cached_nft_location = "cache/soliens/" + address + ".json"
+			with open(nft_cache_location) as metadata_json:
+			    metadata = json.load(metadata_json)
+			nft_list.append(SolanaNFT(address, metadata))
 		return SearchResponse(nft_list)
 
 	except Exception as ex:

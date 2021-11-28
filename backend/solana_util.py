@@ -1,6 +1,3 @@
-import json
-import urllib.request
-
 #-----------------------------------------------------------------------
 
 # Solana NFT object.
@@ -9,13 +6,13 @@ class SolanaNFT:
 	def __init__(self, address, metadata):
 		self.address = address
 		self.metadata = metadata
-		with urllib.request.urlopen(metadata["data"]["uri"]) as url:
-			data = json.loads(url.read().decode())
-			self.data = data
+		# with urllib.request.urlopen(metadata["data"]["uri"]) as url:
+		# 	data = json.loads(url.read().decode())
+		# 	self.data = data
 
 	# Returns the image URL associated with the NFT.
 	def get_img_url(self):
-		return self.data["image"]
+		return self.metadata["image"]
 
 #-----------------------------------------------------------------------
 
