@@ -19,6 +19,16 @@
          success: redirectPage
       });
    }
+
+   function setup() {
+      $("#wallet").on('keyup', function (e) {
+         if (e.key === 'Enter' || e.keyCode === 13) {
+            enqueue_search();
+         }
+      });
+   }
+
+   $(document).ready(setup);
 </script>
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
@@ -37,7 +47,6 @@
       <h1>Solien Gallery</h1>
       <h2>A New Way To Showcase Your NFTs</h2>
       <center>
-      <form id="form" onsubmit="enqueue_search()" method="get">
          <table>
             <tr>
                <td><br><input type="text" id="wallet" placeholder="Wallet Number"></td>
@@ -45,7 +54,6 @@
                <td><button onclick="enqueue_search()">Search</button></td>
             </tr>
          </table>
-      </form>
       </center>
    </div>
 </div>
