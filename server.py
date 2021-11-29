@@ -2,12 +2,13 @@ from rq import Queue
 from sys import stderr
 from flask import Flask, make_response, render_template, request
 from flask import jsonify
+import os
+import redis
 
 from backend.img_util import GalleryRequest, Image
 from backend.img_generate import generate_gallery
 from backend.solana_search import search
 from backend.solana_util import SearchRequest, SearchResponse, SolanaNFT
-from worker import conn
 
 #-----------------------------------------------------------------------
 
@@ -21,6 +22,8 @@ frontend_path = "templates/"
 ipfs_url = "https://ipfs.io/ipfs/"
 
 # Queue for background tasks.
+redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+conn = redis.from_url(redis_url)
 q = Queue(connection=conn)
 
 #-----------------------------------------------------------------------
