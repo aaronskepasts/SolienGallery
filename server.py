@@ -18,6 +18,9 @@ app = Flask(__name__, template_folder=".")
 # Path to front-end templates.
 frontend_path = "templates/"
 
+# Default error message.
+default_err = "A server error has occurred."
+
 # URL pattern for Solien images.
 ipfs_url = "https://ipfs.io/ipfs/"
 
@@ -38,9 +41,8 @@ def index():
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
         html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
+                               error_message=default_err)
         return make_response(html)
 
 #-----------------------------------------------------------------------
@@ -55,10 +57,7 @@ def enqueue_search(wallet):
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
-        html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
-        return make_response(html)
+        return -1
 
 #-----------------------------------------------------------------------
 
@@ -79,10 +78,7 @@ def job_status(job_id):
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
-        html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
-        return make_response(html)
+        return format_task_details("failed", str(ex))
 
 #-----------------------------------------------------------------------
 
@@ -97,9 +93,8 @@ def loading(job_id):
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
         html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
+                               error_message=default_err)
         return make_response(html)
 
 #-----------------------------------------------------------------------
@@ -115,9 +110,8 @@ def alpha_gallery(id_strs):
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
         html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
+                               error_message=default_err)
         return make_response(html)
 
 #-----------------------------------------------------------------------
@@ -146,7 +140,21 @@ def download(id_strs):
 
     except Exception as ex:
         print(ex, file=stderr)
-        error_message = "A server error has occurred."
         html = render_template(frontend_path + "error.html",
-                               error_message=error_message)
+                               error_message=default_err)
         return make_response(html)
+
+#-----------------------------------------------------------------------
+
+def get_error(status_code):
+    if status_code == "404":
+        return "Wallet not found."
+    return default_err
+
+# Renders and returns the error page.
+@app.route("/error", methods=["GET"])
+def error():
+    status_code = request.args.get("status_code")
+    html = render_template(frontend_path + "error.html",
+                           error_message=get_error(status_code))
+    return make_response(html)

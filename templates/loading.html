@@ -14,6 +14,7 @@
    function pollTaskQueue() {
       status_url = "/status/" + "{{ job_id }}";
       $.getJSON(status_url, function(data) {
+         // Redirect to gallery page if task finished.
          if (data.status == "finished") {
             console.log(data.status)
             stop_animation = true;
@@ -28,6 +29,11 @@
             }
             window.location.href = galleryLink;
          }
+         // Redirect to error page if task failed.
+         else if (data.status == "failed") {
+            window.location.href = "{{ url_for('error', status_code='404') }}";
+         }
+         // Otherwise, poll the queue in another half a second.
          else {
             setTimeout(pollTaskQueue, 500);
          }
