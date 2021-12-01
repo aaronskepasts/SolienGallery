@@ -1,3 +1,5 @@
+import json
+
 #-----------------------------------------------------------------------
 
 # Solana NFT object.
@@ -29,3 +31,7 @@ class SearchResponse:
 	# Constructs a response containing a list of NFT objects.
 	def __init__(self, nft_list):
 		self.nft_list = nft_list
+
+	# Serializes object to a JSON formatted string.
+	def json(self):
+		return json.dumps(self, default=lambda o: o.__dict__)

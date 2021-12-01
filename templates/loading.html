@@ -9,21 +9,60 @@
                          "Contacting the Hubble Telescope",
                          "Launching Spaceman Shmu"];
    let ellipsis_call = 0;
+   let stop_animation = false;
+
+   function pollTaskQueue() {
+      status_url = "/status/" + "{{ job_id }}";
+      $.getJSON(status_url, function(data) {
+         // Redirect to gallery page if task finished.
+         if (data.status == "finished") {
+            console.log(data.status)
+            stop_animation = true;
+            let nftList = JSON.parse(data.response)["nft_list"];
+            let galleryLink = "/alpha_gallery/";
+            for (let i = 0; i < nftList.length; i++) {
+               let url = nftList[i]["metadata"]["image"];
+               let url_id = url.substring(url.lastIndexOf('/') + 1);
+               console.log(url_id);
+               galleryLink += (i > 0) ? "=" : "";
+               galleryLink += url_id; 
+            }
+            window.location.href = galleryLink;
+         }
+         // Redirect to error page if task failed.
+         else if (data.status == "failed") {
+            window.location.href = "{{ url_for('error', status_code='404') }}";
+         }
+         // Otherwise, poll the queue in another half a second.
+         else {
+            setTimeout(pollTaskQueue, 500);
+         }
+      });
+   }
+
+   function getLoadingText() {
+      return $("#loading-text").text();
+   }
+
+   function setLoadingText(text) {
+      $("#loading-text").html(text);
+   }
 
    // Randomizes the loading text.
    function randomizeLoadingText() {
-      randomIndex = Math.floor(Math.random() * loadingTexts.length);
-      $("#loading-text").html(loadingTexts[randomIndex]);
+      let randomIndex = Math.floor(Math.random() * loadingTexts.length);
+      setLoadingText(loadingTexts[randomIndex]);
       ellipsis_call = 0;
    }
 
    // Animates the loading text with ellipses, randomizing the displayed
    // text non-deterministically.
    function animateLoadingText() {
-      text = $("#loading-text").text();
-      new_text = false;
+      if (stop_animation) { return; }
+      let text = getLoadingText();
+      let new_text = false;
       if (ellipsis_call < 3) {
-         $("#loading-text").html(text + ".");
+         setLoadingText(text + ".");
       }
       else {
          new_text = (Math.random() > 0.33);
@@ -31,7 +70,7 @@
             randomizeLoadingText();
          }
          else {
-            $("#loading-text").html(text.substring(0, text.length - 3));
+            setLoadingText(text.substring(0, text.length - 3));
          }
       }
       if (!new_text) {
@@ -40,8 +79,12 @@
    }
 
    function setup() {
-      randomizeLoadingText()
+      // Set up loading text.
+      randomizeLoadingText();
       window.setInterval(animateLoadingText, 400);
+
+      // Set up the task polling.
+      pollTaskQueue();
    }
 
    $(document).ready(setup);
@@ -73,6 +116,6 @@
             <div></div>
          </div>
       </center>
-      <h2 id="loading-text"></h2>
+      <h3 id="loading-text"></h3>
    </div>
 </div>

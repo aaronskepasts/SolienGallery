@@ -128,7 +128,16 @@ hr {
 }
 #photol-list {
 vertical-align: middle;
+}
    
+#gallery {
+   background-repeat: no-repeat;
+   background-position: center;
+   
+   background-size: 600px 200px;
+   display: table-cell;
+   vertical-align: middle;
+
 }
 
 .button {

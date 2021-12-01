@@ -2,12 +2,33 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-   // Sets the action of the form after submission.
-   function update_action() {
-      wallet = document.getElementById("wallet").value;
-      req_url = "/alpha_gallery/" + wallet;
-      document.getElementById("form").action = wallet ? req_url : "/";
+   // Redirects the page to the appropriate loading screen.
+   function redirectPage(job_id) {
+      window.location.href = "/loading/" + job_id;
    }
+
+   // Sets the action of the form after submission.
+   function enqueue_search() {
+      wallet = $("#wallet")[0].value;
+      if (!wallet) { return; }
+      
+      req_url = "/enqueue_search/" + wallet;
+      $.ajax({
+         type: "GET",
+         url: req_url,
+         success: redirectPage
+      });
+   }
+
+   function setup() {
+      $("#wallet").on('keyup', function (e) {
+         if (e.key === 'Enter' || e.keyCode === 13) {
+            enqueue_search();
+         }
+      });
+   }
+
+   $(document).ready(setup);
 </script>
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
@@ -24,17 +45,25 @@
    </div>
    <div class="content">
       <h1>Solien Gallery</h1>
-      <h2>A New Way To Showcase Your NFTs</h2>
+      <h3>A New Way To Showcase Your NFTs</h3>
       <center>
-      <form id="form" onsubmit="update_action()" method="get">
          <table>
             <tr>
                <td><br><input type="text" id="wallet" placeholder="Wallet Number"></td>
                <td style="padding: 10px"></td>
-               <td><input type="submit" value="Search"></td>
+               <td><button onclick="enqueue_search()">Search</button></td>
             </tr>
          </table>
-      </form>
       </center>
    </div>
+</div>
+<div class="about">
+   <center>
+      <h2>About The Project</h2>
+      <br>
+
+      <p>This is the Solien Gallery, a project for COS 333 at Princeton University. We want to help Solien NFT owners show off their coolest Soliens with a custom Twitter banner.</p>
+      <p>Enter your wallet number above to get started.</p>
+      <br>
+   </center>
 </div>

@@ -5,3 +5,5 @@ numpy==1.21.4
 urllib3==1.26.7
 Pillow==8.4.0
 cloudinary==1.28.0
+redis==4.0.2
+rq==1.10.0

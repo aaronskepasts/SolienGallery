@@ -13,7 +13,8 @@
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
          galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
-         submittable = submittable + "=" + galleryUrls[i];
+         submittable += (i > 0) ? "=" : "";
+         submittable += galleryUrls[i];      
       }
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
       document.getElementById("create-button").action = submittable;
@@ -55,12 +56,22 @@
 
    }
 
+   function update_background(){
+      color = document.getElementById("colorpicker").value;
+      image = "linear-gradient(" + color + ", " + color + ")"
+      document.getElementById("gallery").style.backgroundImage = image
+   }
+   
    function initialize(walletItem) {
       walletImages.push(walletItem);
       console.log(walletImages.length);
    }
 
-   function setup() { }
+   function setup() {
+      update_background()
+      document.getElementById("colorpicker").addEventListener("input", update_background)
+   }
+
    $(document).ready(setup);
 </script>
 
