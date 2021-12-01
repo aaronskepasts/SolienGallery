@@ -58,7 +58,7 @@
 
    }
 
-   function updateBackground(){
+   function update_background(){
       color = document.getElementById("colorpicker").value;
       image = "linear-gradient(" + color + ", " + color + ")"
       document.getElementById("gallery").style.backgroundImage = image
@@ -70,8 +70,8 @@
    }
 
    function setup() {
-      updateBackground()
-      document.getElementById("colorpicker").addEventListener("input", update_background)
+      update_background();
+      document.getElementById("colorpicker").addEventListener("input", update_background);
    }
 
    $(document).ready(setup);
@@ -106,6 +106,12 @@
             <div class="row justify-content-center" id="photo-list"></div>
          </div>
       </div>
+
+      <!-- Color Wheel -->
+      <form style="z-index: 1">
+         <label for="colorpicker">Select a Background Color:</label>
+         <input type="color" id="colorpicker" name = "colorpicker" value="#1A33EA">
+      </form>
 
       <!-- Button -->
       <div class="button-container">

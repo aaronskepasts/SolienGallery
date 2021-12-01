@@ -72,7 +72,7 @@ h3 {
     position: absolute;
     top: 75%;
     left: 95%;
-    transform: translate(-40.25%, -75%);
+    transform: translate(-50%, -50%);
     object-fit: cover;
 }
 

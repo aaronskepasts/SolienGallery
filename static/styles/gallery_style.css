@@ -82,7 +82,7 @@ button:hover {
 .nft-img {
    max-height: calc(var(--height) * var(--nft-factor));
    max-width: calc(var(--width) * var(--nft-factor));
-   margin: 0px 12px 0px 12px;
+   margin: 20px 12px 20px 12px;
   
    transition: .95s ease;
 }
@@ -118,7 +118,7 @@ button:hover {
     position: absolute;
     top: 75%;
     left: 95%;
-    transform: translate(-40.25%, -75%);
+    transform: translate(-50%, -50%);
     object-fit: cover;
 }
 
@@ -162,9 +162,12 @@ button:hover {
 }
    
 #gallery {
-   /* background-repeat: no-repeat;*/
-   /* background-position: center;   */
-   /* background-size: 600px 200px;*/
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 1000px;
+    display: table-cell;
+    vertical-align: middle;
+   
 }
 
 .button-container {
