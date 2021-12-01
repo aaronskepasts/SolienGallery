@@ -60,13 +60,22 @@
       document.getElementById('temp').appendChild(new_img);
                            
    }
+
+   function update_background(){
+      color = document.getElementById("colorpicker").value;
+      image = "linear-gradient(" + color + ", " + color + ")"
+      document.getElementById("gallery").style.backgroundImage = image
+   }
    
    function initialize(walletItem) {
       walletImages.push(walletItem);
       console.log(walletImages.length);
    }
 
-   function setup() { }
+   function setup() {
+      update_background()
+      document.getElementById("colorpicker").addEventListener("input", update_background)
+   }
 
    $(document).ready(setup);
 </script>
@@ -92,6 +101,10 @@
                   <hr>
                </center>
             </li>
+            <form>
+               <label for="colorpicker">Select a Background Color:</label>
+               <input type="color" id="colorpicker" name = "colorpicker" value="#1A33EA">
+            </form>
             <!-- Image List -->
             <li class="list-group-item bg-dark border-0" id="image-container">
                   <center id="temp">

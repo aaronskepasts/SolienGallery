@@ -64,11 +64,10 @@ hr {
 }
 
 #gallery {
-   background-image: url('https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500');
    background-repeat: no-repeat;
    background-position: center;
    
-   background-size: 80vh;
+   background-size: 600px 200px;
    display: table-cell;
    vertical-align: middle;
 
