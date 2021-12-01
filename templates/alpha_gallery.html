@@ -8,7 +8,10 @@
    let galleryImages = [];
    let galleryUrls = [];
    // Sets the action of the form after submission.
-   function update_action() {
+   function redirectToDownload() {
+      if (galleryImages.length == 0) {
+         return;
+      }
       let submittable = "/download/"
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
@@ -17,13 +20,12 @@
          submittable += galleryUrls[i];      
       }
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
-      document.getElementById("create-button").action = submittable;
+      window.location.href = submittable;
    }
 
    let i = 0;
    function add_img(img_url, id) {
       if (i < 4) {
-         $("#create-button").css("display", "inline-block");
          // creates new image for gallery
          new_img = new Image();
          new_img.classList.add("nft-img");
@@ -52,11 +54,11 @@
       new_img.id = id;
       new_img.src = url;
       new_img.addEventListener('click', function () { add_img(url, id); });
-      document.getElementById('temp').appendChild(new_img);
+      document.getElementById('inner-container').appendChild(new_img);
 
    }
 
-   function update_background(){
+   function updateBackground(){
       color = document.getElementById("colorpicker").value;
       image = "linear-gradient(" + color + ", " + color + ")"
       document.getElementById("gallery").style.backgroundImage = image
@@ -68,7 +70,7 @@
    }
 
    function setup() {
-      update_background()
+      updateBackground()
       document.getElementById("colorpicker").addEventListener("input", update_background)
    }
 
@@ -90,7 +92,7 @@
 </head>
 
 <body>
-   <div class="showcase ">
+   <div class="showcase">
       <div class="video-container">
          <video autoplay muted loop>
             <source
@@ -98,58 +100,30 @@
                type="video/mp4">
          </video>
       </div>
-      <div class="content container-fluid p-0">
-         <!-- Gallery -->
-         <div class="row p-0 m-0 align-items-center"
-            id="gallery-container">
-
-            
-               <div class="col justify-content-center" id="gallery">
-
-                  <div class="row justify-content-center"
-                     id="photo-list">
-                  </div>
-
-
-               </div>
-            
-            
-
-
-
+      <!-- Gallery -->
+      <div class="align-items-center" id="gallery-container">
+         <div class="col" id="gallery">
+            <div class="row justify-content-center" id="photo-list"></div>
          </div>
-
       </div>
-      <div
-               class="row align-items-end justify-content-center m-50 p-50" style="
-               z-index: 10000;                padding-bottom: 25px;">
-               <form id="create-button" style="display: none;"
-                  onsubmit="update_action()" method="get">
-                  <input type="submit" class="button"
-                     value="Create Gallery">
-               </form>
-            </div>
+
+      <!-- Button -->
+      <div class="button-container">
+            <button onclick="redirectToDownload()">Create Gallery</button>
+      </div>
 
       <!-- Sidebar -->
-      <div class="bg-dark row " id="sticky-sidebar">
-         <div class="col-2" id="wallet">
-            <ul class="list-group bg-dark">
-               <li class="list-group-item border-0" id="nft_list">
-                  <h1 id="header">Your NFTs</h1>
-                  <hr>
-               </li>
-            </ul>
-         </div>
-         <div class="col-10">
-            <ul class="list-group bg-dark m-0 p-0">
+      <div class="row" id="sticky-sidebar">
+         <div class="col-12">
+            <ul class="list-group m-0 p-0">
                <!-- Image List -->
-               <li class="list-group-item bg-dark border-0 m-0 p-0"
+               <li class="list-group-item border-0 m-0 p-0"
                   id="image-container">
-                  <div id=temp>
-                     {% for i in range(search_res.nft_list|length()) %}
+                  <div id="inner-container">
+                     {% for i in range(search_res|length()) %}
                      <img class="selection-img" id="{{ i }}"
-                        src="{{ search_res.nft_list[i].get_img_url() }}"
-                        onclick="add_img('{{ search_res.nft_list[i].get_img_url() }}', id)">
+                        src="{{ search_res[i] }}"
+                        onclick="add_img('{{ search_res[i] }}', id)">
                      <script type="text/javascript">
                         initialize(document.getElementById(i));
                      </script>
@@ -159,6 +133,7 @@
             </ul>
          </div>
       </div>
+      <br>
    </div>
    </div>
 </body>

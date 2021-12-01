@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+
 :root {
    --width: 1248px;
    --height: 1690px;
    --scaling-factor: 0.1;
-   --nft-factor: 0.2;
+   --nft-factor: 0.175;
 }
 
 body { background-color: #f8f9fa; }
@@ -17,6 +19,24 @@ hr {
    height: 0.1px;
    width: 50%;
    background-color: white;
+}
+
+button {
+   font-family: 'Open Sans', sans-serif;
+   font-size: 100%;
+   font-weight: 60;
+   display: inline-block;
+   padding: 10px 20px;
+   background: var(--primary-color);
+   color: #fff;
+   border-radius: 1px;
+   border: solid #fff 1px;
+   margin-top: 25px;
+   opacity: 0.7;
+}
+
+button:hover {
+   transform: scale(0.98);
 }
 
 ::-webkit-scrollbar { width: 10px; }
@@ -36,17 +56,25 @@ hr {
    padding: 0px;
    z-index: 50;
    align-items: center;
-   
+   min-width: 300px;
 }
 
-#image-container { overflow: auto; }
+#image-container { 
+   overflow: auto;
+   background-color: transparent;
+}
+
+#inner-container {
+   overflow: auto;
+   height: 200px;
+}
 
 .selection-img {
    max-height: calc(var(--height) * var(--scaling-factor));
    max-width: calc(var(--width) * var(--scaling-factor));
    margin-left: 10px;
    margin-right: 10px;
-   margin-top:20px;
+   margin-bottom:20px;
   /* border-radius: 5px;*/
    transition: .95s ease;
 }
@@ -54,14 +82,12 @@ hr {
 .nft-img {
    max-height: calc(var(--height) * var(--nft-factor));
    max-width: calc(var(--width) * var(--nft-factor));
-   margin-left: 10px;
-   margin-right: 10px;
+   margin: 0px 12px 0px 12px;
   
    transition: .95s ease;
 }
 
 .selection-img:hover { opacity: 0.6; }
-
 
 .showcase {
    height: 100vh;
@@ -87,13 +113,13 @@ hr {
 }
 
 .video-container video {
-   min-width: 100%;
-   min-height: 100%;
-   position: absolute;
-   top: 75%;
-   left: 95%;
-   transform: translate(-50%, -50%);
-   object-fit: cover;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 75%;
+    left: 95%;
+    transform: translate(-40.25%, -75%);
+    object-fit: cover;
 }
 
 .video-container:after {
@@ -108,61 +134,56 @@ hr {
 }
 
 .content {
-  z-index: 2;
-  height: 100%;
+   z-index: 2;
+   height: 100%;
    width: 100%;
 }
+
 #gallery-container {
    background-image: url('https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500');
+   background-size: 1000px;
    background-repeat: no-repeat;
-   background-position: center;
+   background-position: center center;
    
-   /*top: 50%; */
-  /* bottom: 250px; */
+   /* top: 50%; */
+   /* bottom: 250px; */
+
+   display: flex;
+   justify-content: center;
    
    z-index: 1000; 
    height: 100%;
    width: 100%;
-   
-   padding-bottom: 20px;
+   margin-top: 20px;
 }
+
 #photol-list {
-vertical-align: middle;
+   vertical-align: middle;
 }
    
 #gallery {
-   background-repeat: no-repeat;
-   background-position: center;
-   
-   background-size: 600px 200px;
-   display: table-cell;
-   vertical-align: middle;
-
+   /* background-repeat: no-repeat;*/
+   /* background-position: center;   */
+   /* background-size: 600px 200px;*/
 }
 
-.button {
-   background-color: #222222; /* black */
-   border: none;
-   border-radius: 4px;
-   color: white;
-   padding: 12px 25px;
-   text-align: center;
-   display: table-cell;
-   font-size: 16px;
-   z-index: 1000;
+.button-container {
+   z-index: 10000;
+   padding-bottom: 30px;
 }
 
-#nft_list{
-  align-self: center;
-  background-color: rgb(17, 15, 15);
-  z-index: 100;
-  position: relative;
+#nft_list {
+   align-self: center;
+   background-color: rgb(17, 15, 15);
+   z-index: 100;
+   position: relative;
 }
-#video{
+
+#video {
    height: 100%;
    width: 100%;
 }
 
-.wallet{
+.wallet {
    height: 250px;
 }
