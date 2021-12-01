@@ -7,8 +7,8 @@ from theblockchainapi import TheBlockchainAPIResource, SolanaNetwork
 #-----------------------------------------------------------------------
 
 # Blockchain API key pair
-MY_API_KEY_ID = "pvFe4YVTcQxmgzS"
-MY_API_SECRET_KEY = "1ftzweRMXGxPLWo"
+MY_API_KEY_ID = "pMHP8YsDR1EeXhf"
+MY_API_SECRET_KEY = "I3VNE5S4vYa1QuX"
 BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 	api_key_id=MY_API_KEY_ID,
 	api_secret_key=MY_API_SECRET_KEY

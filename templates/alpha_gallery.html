@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <!-- Javascript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+   src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
    let walletImages = [];
    let galleryImages = [];
@@ -11,120 +12,142 @@
       let submittable = "/download/"
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
-         galleryUrls[i] = url.substring(url.lastIndexOf('/')+1);
-         submittable = submittable + "=" + galleryUrls[i];      
+         galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
+         submittable = submittable + "=" + galleryUrls[i];
       }
-     
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
-
       document.getElementById("create-button").action = submittable;
    }
 
    let i = 0;
    function add_img(img_url, id) {
-      if (i < 4){
-      $("#create-button").css("display", "inline-block");
-      // creates new image for gallery
-      new_img = new Image();
-      
-      new_img.classList.add("nft-img");
-      new_img.id = id+"gallery";
-      new_img.src = img_url;
-      new_img.addEventListener('click', function(){addToGallery(id, img_url);});
-      
-      document.getElementById("photo-list").appendChild(new_img);
-      
-      // ajusts tracker structures
-      galleryImages.push(document.getElementById(id));
-      walletImages.pop(document.getElementById(id));
-      i = i+1;
-      console.log(i);
-      console.log(document.getElementById(id).parentNode);
-      document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+      if (i < 4) {
+         $("#create-button").css("display", "inline-block");
+         // creates new image for gallery
+         new_img = new Image();
+         new_img.classList.add("nft-img");
+         new_img.id = id + "gallery";
+         new_img.src = img_url;
+         new_img.addEventListener('click', function () { addToGallery(id, img_url); });
+         document.getElementById("photo-list").appendChild(new_img);
+         // ajusts tracker structures
+         galleryImages.push(document.getElementById(id));
+         walletImages.pop(document.getElementById(id));
+         i = i + 1;
+         console.log(i);
+         console.log(document.getElementById(id).parentNode);
+         document.getElementById(id).parentNode.removeChild(document.getElementById(id));
       }
    }
 
    function addToGallery(id, url) {
       console.log("yeet");
-      document.getElementById(id +"gallery").parentNode.removeChild(document.getElementById(id+"gallery"));
+      document.getElementById(id + "gallery").parentNode.removeChild(document.getElementById(id + "gallery"));
       walletImages.push(document.getElementById(id));
       galleryImages.pop(document.getElementById(id));
-      i = i-1;
-      
+      i = i - 1;
       new_img = new Image();
       new_img.classList.add("selection-img");
       new_img.id = id;
       new_img.src = url;
-      new_img.addEventListener('click', function(){add_img(url, id);});
+      new_img.addEventListener('click', function () { add_img(url, id); });
       document.getElementById('temp').appendChild(new_img);
-                           
+
    }
-   
+
    function initialize(walletItem) {
-         walletImages.push(walletItem);
-         console.log(walletImages.length);
-      }
+      walletImages.push(walletItem);
+      console.log(walletImages.length);
+   }
 
    function setup() { }
-
    $(document).ready(setup);
 </script>
 
 <!-- CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/gallery_style.css') }}">
+<link rel="stylesheet"
+   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+   href="{{ url_for('static', filename='styles/gallery_style.css') }}">
 
 <!-- HTML -->
+
 <head>
    <title>Gallery Builder</title>
+   <meta name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
 <body>
-<div class="container-fluid">
-   <div class="row">
+   <div class="showcase ">
+      <div class="video-container">
+         <video autoplay muted loop>
+            <source
+               src="https://res.cloudinary.com/dskvzlrpw/video/upload/v1637354076/solien/blue_planet.mp4"
+               type="video/mp4">
+         </video>
+      </div>
+      <div class="content container-fluid p-0">
+         <!-- Gallery -->
+         <div class="row p-0 m-0 align-items-center"
+            id="gallery-container">
+
+            
+               <div class="col justify-content-center" id="gallery">
+
+                  <div class="row justify-content-center"
+                     id="photo-list">
+                  </div>
+
+
+               </div>
+            
+            
+
+
+
+         </div>
+
+      </div>
+      <div
+               class="row align-items-end justify-content-center m-50 p-50" style="
+               z-index: 10000;                padding-bottom: 25px;">
+               <form id="create-button" style="display: none;"
+                  onsubmit="update_action()" method="get">
+                  <input type="submit" class="button"
+                     value="Create Gallery">
+               </form>
+            </div>
+
       <!-- Sidebar -->
-      <div class="col-3 px-1 bg-dark position-fixed" id="sticky-sidebar">
-         <ul class="list-group bg-dark">
-            <li class="list-group-item bg-dark border-0">
-               <center>
+      <div class="bg-dark row " id="sticky-sidebar">
+         <div class="col-2" id="wallet">
+            <ul class="list-group bg-dark">
+               <li class="list-group-item border-0" id="nft_list">
                   <h1 id="header">Your NFTs</h1>
                   <hr>
-               </center>
-            </li>
-            <!-- Image List -->
-            <li class="list-group-item bg-dark border-0" id="image-container">
-                  <center id = temp>
+               </li>
+            </ul>
+         </div>
+         <div class="col-10">
+            <ul class="list-group bg-dark m-0 p-0">
+               <!-- Image List -->
+               <li class="list-group-item bg-dark border-0 m-0 p-0"
+                  id="image-container">
+                  <div id=temp>
                      {% for i in range(search_res.nft_list|length()) %}
-                     <img class="selection-img"
-                             id="{{ i }}"
-                             src="{{ search_res.nft_list[i].get_img_url() }}"
-                             onclick="add_img('{{ search_res.nft_list[i].get_img_url() }}', id)">
+                     <img class="selection-img" id="{{ i }}"
+                        src="{{ search_res.nft_list[i].get_img_url() }}"
+                        onclick="add_img('{{ search_res.nft_list[i].get_img_url() }}', id)">
                      <script type="text/javascript">
                         initialize(document.getElementById(i));
                      </script>
                      {% endfor %}
-                  </center>
-            </li>
-         </ul>
-      </div>
-      <!-- Gallery -->
-      <div id="gallery-container" class="col offset-3">
-         <center id="gallery">
-            <br>
-            <br>
-            <center>
-               <br>
-               <br>
-               <div id="photo-list">
-               </div>
-            </center>
-            <br>
-            <br>
-            <form id="create-button" style="display: none;" onsubmit="update_action()" method="get">
-               <input type="submit" class="button" value="Create Gallery">
-            </form>
-         </center>
+                  </div>
+               </li>
+            </ul>
+         </div>
       </div>
    </div>
-</div>
+   </div>
 </body>
