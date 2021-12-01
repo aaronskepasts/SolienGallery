@@ -30,10 +30,18 @@ class Image:
         (self.w, self.h) = size
 
     # Loads image from a URL.
-    def load(self, url):
+    def loadURL(self, url):
         response = requests.get(url)
         self.img = PilImage.open(BytesIO(response.content))
         (self.w, self.h) = self.img.size
+    
+
+    # where to use?
+    def loadColor(self, color):
+        self.generate((1500, 500), color=color)
+    
+    def loadImage(self, image):
+        self.img = image
 
     # Loads image from a path.
     def open(self, path):
