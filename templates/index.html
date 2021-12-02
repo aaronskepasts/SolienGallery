@@ -35,6 +35,7 @@
 
 <head>
    <title>Solien Gallery</title>
+   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
 
 <div class="showcase">
@@ -44,7 +45,8 @@
       </video>
    </div>
    <div class="content">
-      <h1>Solien Gallery</h1>
+      <img  src="{{ url_for('static', filename='images/logo4.png') }}" style="margin-bottom: 10px;">
+     <!---- <h1>Solien Gallery</h1> ---->
       <h3>A New Way To Showcase Your NFTs</h3>
       <center>
          <table>

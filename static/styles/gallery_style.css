@@ -190,3 +190,118 @@ button:hover {
 .wallet {
    height: 250px;
 }
+
+
+body{
+	display: flex;
+  padding-top: 50px;
+  padding-bottom: 50px;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+}
+
+.parent-selector{
+   z-index: 1000;
+ 
+  
+  background-color: #000000;
+  border-radius: 5px;
+  box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  padding:20px;
+}
+
+.list-image > img{
+  display: inline-block;
+  margin: 10px;
+  width: 64px;
+  heigth: 64px;
+  cursor: pointer;
+}
+
+.list-image > img:hover{
+  border: solid 2px #1e88e5;
+  border-radius: 2px;
+}
+
+.list-image > img.active{
+  border: solid 2px #43a047;
+  border-radius: 2px;
+}
+
+.view-image > img{
+  max-width: 128px;
+  max-height: 128px;
+  padding: 10px;
+}
+
+/* INPUT TEXT */
+
+.input-div {
+  position: relative;
+  padding: 15px;
+}
+
+.input-text {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #242424;
+  outline: 0;
+  font-size: 12px;
+  color: #242424;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.input-text::placeholder {
+  color: transparent;
+}
+
+.input-text:placeholder-shown ~ .input-label {
+  font-size: 14px;
+  cursor: text;
+  top: 20px;
+}
+
+label,
+.input-text:focus ~ .input-label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 12px;
+  color: #242424;
+}
+
+.input-text:focus ~ .input-label {
+  color: #242424;
+}
+
+.input-text:focus {
+  padding-bottom: 6px;
+  border-bottom: 2px solid #242424;
+}
+
+.button2{
+   width: 90%;
+   margin-left: 5%;
+   margin-right: 5%;
+   padding-top: 8px;
+   padding-bottom: 8px;
+   background-color: #424242;
+   text-align: center;
+   cursor: pointer;
+   border-radius: 2px;
+ }
+ .button2:hover{
+    background-color: #242424;
+ }
+ .button2:active{
+    background-color: #121212;
+ }
+ 
+ .button2 > span{
+   color: #eeeeee
+ }
