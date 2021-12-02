@@ -89,6 +89,7 @@ h3 {
 
 .content {
    z-index: 2;
+   padding-bottom: 50px;
 }
 
 .about {
