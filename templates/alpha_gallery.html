@@ -160,7 +160,7 @@
 
       </script>
       <div class="parent-selector">
-         <a>Select a Background</a>
+         <p>Select a Background</p>
          <div class="select-image">
             <div class="list-image" style= "padding-bottom: 10px;">
                <img class="active"
@@ -179,17 +179,16 @@
             <!-- Color Wheel -->
             <div class="container">
                <div class="row">
-                  <div class="col">
-                     <form style="z-index: 1; padding-bottom: 10px;">
-                        <label for="colorpicker">Select a Background
-                           Color:</label>
+                  <div class="col my-auto">
+                     <form style="z-index: 1; padding: 10px;">
+                        <!-- <label for="colorpicker">Select a Background Color:</label> -->
                         <input type="color" id="colorpicker"
-                           name="colorpicker" value="#1A33EA">
+                           name="colorpicker" value="#ffffff">
                      </form>
                   </div>
                   <div class="col">
-                     <button onclick="update_background()">
-                        <span>Select Color</span></button>
+                     <button onclick="update_background()" style="margin-bottom: 20px">
+                        <span>Apply Color</span></button>
                   </div>
                </div>
             </div>

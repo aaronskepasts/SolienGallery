@@ -4,7 +4,7 @@
    --width: 1248px;
    --height: 1690px;
    --scaling-factor: 0.1;
-   --nft-factor: 0.175;
+   --nft-factor: 0.1;
 }
 
 body { background-color: #f8f9fa; }
@@ -12,6 +12,14 @@ body { background-color: #f8f9fa; }
 h1 {
    color: white;
    font-size: 26px;
+}
+
+p {
+    max-width: 50ch;
+    font-weight: 200;
+    font-size: 1em;
+    line-height: 1.35;
+    margin-bottom: 15px;
 }
 
 hr {
@@ -141,7 +149,7 @@ button:hover {
 
 #gallery-container {
    /* background-image: url('https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500'); */
-   background-size: 1000px;
+   background-size: 650px;
    background-repeat: no-repeat;
    background-position: center center;
    
@@ -164,14 +172,15 @@ button:hover {
 #gallery {
     background-repeat: no-repeat;
     background-position: center; 
-    background-size: 1000px;
+    background-size: 650px;
     display: table-cell;
     vertical-align: middle;
-   
 }
 
 .button-container {
    z-index: 10000;
+   margin-top: 0px;
+   padding-top: 0px;
    padding-bottom: 30px;
 }
 
