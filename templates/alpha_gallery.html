@@ -70,11 +70,14 @@
    }
 
    function update_background2(bgimage) {
-      image = new Image();
-      image.src = bgimage;
-      console.log("yeet");
-      console.log(image.src);
-      document.getElementById("gallery").style.backgroundImage = image;
+      //image = new Image();
+      //image.src = bgimage;
+     // image.id = "galbgimage";
+      //image.classList.add("gallery");
+     // console.log("yeet");
+     // console.log(image.src);
+     // console.log(image.id);
+      document.getElementById("gallery").style.backgroundImage = "url('"+ bgimage+"')";
       console.log("success");
    }
 
@@ -84,8 +87,9 @@
    }
 
    function setup() {
-      update_background();
-      document.getElementById("colorpicker").addEventListener("input", update_background);
+      update_background2("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500");
+     // update_background();
+     // document.getElementById("colorpicker").addEventListener("input", update_background);
       
    }
 
@@ -142,33 +146,16 @@
             update_background2(elementSelected.attr('src'));
          });
 
-         $(document).on('input', '#text-src', function () {
-            $('.list-image > img').each(function () {
-               $(this).removeClass('active');
-            })
-            elementSelected = $(this);
-            typeSelected = true;
-         })
 
          $(document).on('click', '#button-confirm', function () {
-            $('.select-image').hide();
-            if (typeSelected == true) {
-               $('.view-image > img').attr('src', elementSelected.val());
-            }
-            else {
-               $('.view-image > img').attr('src', elementSelected.attr('src'));
-            }
-            $('.view-image').fadeIn('high');
+
          })
 
-         $(document).on('click', '#button-other', function () {
-            $('.view-image').hide();
-            $('.select-image').fadeIn('high');
-         })</script>
+      </script>
       <div class="parent-selector">
          <a>Select a Background</a>
          <div class="select-image">
-            <div class="list-image">
+            <div class="list-image" style= "padding-bottom: 10px;">
                <img class="active"
                   src="https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500"
                   alt="1" />
@@ -183,20 +170,25 @@
                   alt="2" />
             </div>
             <!-- Color Wheel -->
-            <form style="z-index: 1; padding-bottom: 10px;">
-               <label for="colorpicker">Select a Background
-                  Color:</label>
-               <input type="color" id="colorpicker" name="colorpicker"
-                  value="#1A33EA">
-            </form>
-            
+            <div class="container">
+               <div class="row">
+                  <div class="col">
+                     <form style="z-index: 1; padding-bottom: 10px;">
+                        <label for="colorpicker">Select a Background
+                           Color:</label>
+                        <input type="color" id="colorpicker"
+                           name="colorpicker" value="#1A33EA">
+                     </form>
+                  </div>
+                  <div class="col">
+                     <button onclick="update_background()">
+                        <span>Select Color</span></button>
+                  </div>
+               </div>
+            </div>
          </div>
-         
       </div>
-
-
-
-
+      
       <!-- Button -->
       <div class="button-container">
          <button onclick="redirectToDownload()">Create Gallery</button>
