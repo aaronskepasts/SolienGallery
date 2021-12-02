@@ -8,6 +8,8 @@
    let galleryImages = [];
    let galleryUrls = [];
    let color;
+   let bgim;
+   let bgtype;
    // Sets the action of the form after submission.
    function redirectToDownload() {
       if (galleryImages.length == 0) {
@@ -22,6 +24,8 @@
       }
 
       document.cookie = "color=" + color + "; path=" + submittable;
+      document.cookie = "backgroundImage=" + bgim + "; path=" + submittable;
+      document.cookie = "backgroundImageType=" + bgtype + "; path=" + submittable;
 
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
       window.location.href = submittable;
@@ -63,6 +67,7 @@
    }
 
    function update_background() {
+      bgtype = "color";
       color = document.getElementById("colorpicker").value;
       image = "linear-gradient(" + color + ", " + color + ")";
       document.getElementById("gallery").style.backgroundImage = image;
@@ -77,6 +82,8 @@
      // console.log("yeet");
      // console.log(image.src);
      // console.log(image.id);
+      bgim = bgimage;
+      bgtype = "image";
       document.getElementById("gallery").style.backgroundImage = "url('"+ bgimage+"')";
       console.log("success");
    }

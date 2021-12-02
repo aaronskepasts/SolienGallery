@@ -122,6 +122,8 @@ def alpha_gallery(id_strs):
 def download(id_strs):
     try:
         color = request.cookies.get("color")
+        bgurl = request.cookies.get("backgroundImage")
+        bgtype = request.cookies.get("backgroundImageType")
         imgs = []
         for img_id in id_strs.split('='):
             img_url = ipfs_url + img_id
@@ -130,7 +132,11 @@ def download(id_strs):
             imgs.append(nft_img)
 
         background_img = Image()
-        background_img.loadColor(color)
+
+        if (bgtype == "color"):
+            background_img.loadColor(color)
+        else:
+            background_img.loadURL(bgurl)
         gallery_request = GalleryRequest(imgs, background_img)
 
         response = generate_gallery(gallery_request)
