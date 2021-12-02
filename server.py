@@ -104,12 +104,9 @@ def loading(job_id):
 def alpha_gallery(id_strs):
     try:
         imgs = [ipfs_url + img_id for img_id in id_strs.split("=")]
-        # color = request.form.get("colorpicker")
-        # print(color)
         html = render_template(frontend_path + "alpha_gallery.html",
                                wallet="aaron", search_res=imgs)
         response = make_response(html)
-        # response.set_cookie("color", color)
         return response
 
     except Exception as ex:
@@ -123,10 +120,8 @@ def alpha_gallery(id_strs):
 # Renders and returns the download page.
 @app.route("/download/<string:id_strs>", methods=["GET"])
 def download(id_strs):
-
-    # color = request.cookies.get("color")
-
     try:
+        color = request.cookies.get("color")
         imgs = []
         for img_id in id_strs.split('='):
             img_url = ipfs_url + img_id
@@ -134,12 +129,7 @@ def download(id_strs):
             nft_img.loadURL(img_url)
             imgs.append(nft_img)
 
-        # background_url = "https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500"
         background_img = Image()
-        # background_img.loadURL(background_url)
-
-        # cookies are not working currently so use example value
-        color = "#1A33EA"
         background_img.loadColor(color)
         gallery_request = GalleryRequest(imgs, background_img)
 
@@ -147,7 +137,8 @@ def download(id_strs):
         img_url  = response.get_gallery()
         html = render_template(frontend_path + "download.html",
                                url=img_url)
-        return make_response(html)
+        response = make_response(html)
+        return response
 
     except Exception as ex:
         print(ex, file=stderr)

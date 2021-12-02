@@ -7,6 +7,7 @@
    let walletImages = [];
    let galleryImages = [];
    let galleryUrls = [];
+   let color;
    // Sets the action of the form after submission.
    function redirectToDownload() {
       if (galleryImages.length == 0) {
@@ -19,6 +20,9 @@
          submittable += (i > 0) ? "=" : "";
          submittable += galleryUrls[i];      
       }
+
+      document.cookie = "color=" + color + "; path=" + submittable;
+
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
       window.location.href = submittable;
    }
