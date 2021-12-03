@@ -11,25 +11,34 @@
    let bgim;
    let bgtype;
 
-   // Sets the action of the form after submission.
-   function redirectToDownload() {
+   function redirectPage(job_id) {
+      window.location.href = "/loading/download/" + job_id;
+   }
+
+   // Enqueues the creation of a gallery 
+   function enqueueGallery() {
       if (galleryImages.length == 0) {
          return;
       }
-      let submittable = "/download/"
+
+      let reqUrl = "/enqueue_gallery/"
       for (let i = 0; i < galleryImages.length; i++) {
          let url = galleryImages[i].src;
          galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
-         submittable += (i > 0) ? "=" : "";
-         submittable += galleryUrls[i];
+         reqUrl += (i > 0) ? "=" : "";
+         reqUrl += galleryUrls[i];
       }
 
-      document.cookie = "color=" + color + "; path=" + submittable;
-      document.cookie = "backgroundImage=" + bgim + "; path=" + submittable;
-      document.cookie = "backgroundImageType=" + bgtype + "; path=" + submittable;
+      document.cookie = "color=" + color + "; path=" + reqUrl;
+      document.cookie = "backgroundImage=" + bgim + "; path=" + reqUrl;
+      document.cookie = "backgroundImageType=" + bgtype + "; path=" + reqUrl;
 
       sessionStorage.setItem("gal", JSON.stringify(galleryUrls));
-      window.location.href = submittable;
+      $.ajax({
+         type: "GET",
+         url: reqUrl,
+         success: redirectPage
+      });
    }
 
    let i = 0;
@@ -171,7 +180,7 @@
                   src="https://www.teahub.io/photos/full/28-289473_twitter-cover-photo-45-stars..jpg"
                   alt="2">
                <input type="color" id="colorpicker" value="#ffffff" onchange="updateBackground()" onclick="updateBackground()">
-               <button onclick="redirectToDownload()">Create</button>
+               <button onclick="enqueueGallery()">Create</button>
             </div>
          </div>
       </div>

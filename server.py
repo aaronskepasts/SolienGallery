@@ -25,9 +25,15 @@ default_err = "A server error has occurred."
 ipfs_url = "https://ipfs.io/ipfs/"
 
 # Queue for background tasks.
-redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis_url = os.getenv("REDISTOGO_URL", "redis://localhost:6379")
 conn = redis.from_url(redis_url)
 q = Queue(connection=conn)
+
+#-----------------------------------------------------------------------
+
+# Helper function to format the details of a background task in JSON.
+def format_task_details(status, response):
+    return jsonify({"status": status, "response": response})
 
 #-----------------------------------------------------------------------
 
@@ -37,6 +43,44 @@ q = Queue(connection=conn)
 def index():
     try:
         html = render_template(frontend_path + "index.html")
+        return make_response(html)
+
+    except Exception as ex:
+        print(ex, file=stderr)
+        html = render_template(frontend_path + "error.html",
+                               error_message=default_err)
+        return make_response(html)
+
+#-----------------------------------------------------------------------
+
+# Returns the status of the job with the given ID.
+@app.route("/status/<string:page>/<string:job_id>", methods=["GET"])
+def job_status(page, job_id):
+    try:
+        job = q.fetch_job(job_id)
+        if not job:
+            return format_task_details("unknown", "")
+        elif not job.result:
+            return format_task_details(job.get_status(), "")
+
+        job_result = job.result
+        if page == "gallery":
+            job_result = job_result.json()
+        return format_task_details(job.get_status(), job_result)
+
+    except Exception as ex:
+        print(ex, file=stderr)
+        return format_task_details("failed", str(ex))
+
+#-----------------------------------------------------------------------
+
+# Renders and returns the loading page.
+@app.route("/loading/<string:page>/<string:job_id>", methods=["GET"])
+def loading(page, job_id):
+    try:
+        job = q.fetch_job(job_id)
+        html = render_template(frontend_path + "loading.html",
+                               page=page, job_id=job.get_id())
         return make_response(html)
 
     except Exception as ex:
@@ -61,50 +105,12 @@ def enqueue_search(wallet):
 
 #-----------------------------------------------------------------------
 
-# Helper function to format the details of a background task in JSON.
-def format_task_details(status, response):
-    return jsonify({"status": status, "response": response})
-
-# Returns the status of the job with the given ID.
-@app.route("/status/<string:job_id>", methods=["GET"])
-def job_status(job_id):
-    try:
-        job = q.fetch_job(job_id)
-        if not job:
-            return format_task_details("unknown", "")
-        elif not job.result:
-            return format_task_details(job.get_status(), "")
-        return format_task_details(job.get_status(), job.result.json())
-
-    except Exception as ex:
-        print(ex, file=stderr)
-        return format_task_details("failed", str(ex))
-
-#-----------------------------------------------------------------------
-
-# Renders and returns the homepage.
-@app.route("/loading/<string:job_id>", methods=["GET"])
-def loading(job_id):
-    try:
-        job = q.fetch_job(job_id)
-        html = render_template(frontend_path + "loading.html",
-                               job_id=job.get_id())
-        return make_response(html)
-
-    except Exception as ex:
-        print(ex, file=stderr)
-        html = render_template(frontend_path + "error.html",
-                               error_message=default_err)
-        return make_response(html)
-
-#-----------------------------------------------------------------------
-
 # Renders and returns the gallery builder page.
-@app.route("/alpha_gallery/<string:id_strs>", methods=["GET"])
-def alpha_gallery(id_strs):
+@app.route("/gallery/<string:id_strs>", methods=["GET"])
+def gallery(id_strs):
     try:
         imgs = [ipfs_url + img_id for img_id in id_strs.split("=")]
-        html = render_template(frontend_path + "alpha_gallery.html",
+        html = render_template(frontend_path + "gallery.html",
                                wallet="aaron", search_res=imgs)
         response = make_response(html)
         return response
@@ -117,30 +123,50 @@ def alpha_gallery(id_strs):
 
 #-----------------------------------------------------------------------
 
+# Creates a gallery from the specified image IDs and background.
+def get_gallery(id_strs, color, bg_url, bg_type):
+    imgs = []
+    for img_id in id_strs.split("="):
+        img_url = ipfs_url + img_id
+        nft_img = Image()
+        nft_img.loadURL(img_url)
+        imgs.append(nft_img)
+
+    background_img = Image()
+
+    if (bg_type == "color"):
+        background_img.loadColor(color)
+    else:
+        background_img.loadURL(bg_url)
+    gallery_request = GalleryRequest(imgs, background_img)
+
+    response = generate_gallery(gallery_request)
+    img_url  = response.get_gallery()
+    return img_url
+
+# Returns the ID of the background task creating the given gallery.
+@app.route("/enqueue_gallery/<string:id_strs>", methods=["GET"])
+def enqueue_gallery(id_strs):
+    try:
+        color = request.cookies.get("color")
+        bg_url = request.cookies.get("backgroundImage")
+        bg_type = request.cookies.get("backgroundImageType")
+        job = q.enqueue(get_gallery, id_strs, color, bg_url, bg_type)
+        return job.get_id()
+
+    except Exception as ex:
+        print(ex, file=stderr)
+        return -1
+
+#-----------------------------------------------------------------------
+
 # Renders and returns the download page.
 @app.route("/download/<string:id_strs>", methods=["GET"])
 def download(id_strs):
     try:
-        color = request.cookies.get("color")
-        bgurl = request.cookies.get("backgroundImage")
-        bgtype = request.cookies.get("backgroundImageType")
-        imgs = []
-        for img_id in id_strs.split('='):
-            img_url = ipfs_url + img_id
-            nft_img = Image()
-            nft_img.loadURL(img_url)
-            imgs.append(nft_img)
-
-        background_img = Image()
-
-        if (bgtype == "color"):
-            background_img.loadColor(color)
-        else:
-            background_img.loadURL(bgurl)
-        gallery_request = GalleryRequest(imgs, background_img)
-
-        response = generate_gallery(gallery_request)
-        img_url  = response.get_gallery()
+        img_ids = id_strs.split("=")
+        img_url = ("http://res.cloudinary.com/dskvzlrpw/image/upload/" + 
+                   img_ids[0] + "/" + img_ids[1])
         html = render_template(frontend_path + "download.html",
                                url=img_url)
         response = make_response(html)
@@ -154,6 +180,7 @@ def download(id_strs):
 
 #-----------------------------------------------------------------------
 
+# Parses an error status code.
 def get_error(status_code):
     if status_code == "404":
         return "Wallet not found."

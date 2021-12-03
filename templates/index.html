@@ -4,18 +4,18 @@
 <script>
    // Redirects the page to the appropriate loading screen.
    function redirectPage(job_id) {
-      window.location.href = "/loading/" + job_id;
+      window.location.href = "/loading/gallery/" + job_id;
    }
 
-   // Sets the action of the form after submission.
-   function enqueue_search() {
-      wallet = $("#wallet")[0].value;
+   // Enqueues a blockchain search.
+   function enqueueSearch() {
+      let wallet = $("#wallet")[0].value;
       if (!wallet) { return; }
       
-      req_url = "/enqueue_search/" + wallet;
+      let reqUrl = "/enqueue_search/" + wallet;
       $.ajax({
          type: "GET",
-         url: req_url,
+         url: reqUrl,
          success: redirectPage
       });
    }
@@ -23,7 +23,7 @@
    function setup() {
       $("#wallet").on('keyup', function (e) {
          if (e.key === 'Enter' || e.keyCode === 13) {
-            enqueue_search();
+            enqueueSearch();
          }
       });
    }
@@ -53,7 +53,7 @@
             <tr>
                <td><br><input type="text" id="wallet" placeholder="Wallet Number"></td>
                <td style="padding: 10px"></td>
-               <td><button onclick="enqueue_search()">Search</button></td>
+               <td><button onclick="enqueueSearch()">Search</button></td>
             </tr>
          </table>
       </center>
