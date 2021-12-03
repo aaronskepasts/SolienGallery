@@ -1,25 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
 :root {
-   --width: 1248px;
-   --height: 1690px;
-   --scaling-factor: 0.1;
-   --nft-factor: 0.1;
+   --width: 124.8vh;
+   --height: 169.0vh;
+   --scaling-factor: 0.12;
+   --nft-factor: 0.24;
 }
 
-body { background-color: #f8f9fa; }
-
-h1 {
-   color: white;
-   font-size: 26px;
-}
-
-p {
-    max-width: 50ch;
-    font-weight: 200;
-    font-size: 1em;
-    line-height: 1.35;
-    margin-bottom: 15px;
+body {
+   display: flex;
+   background-color: #f8f9fa;
+   overflow: hidden;
 }
 
 hr {
@@ -34,17 +25,28 @@ button {
    font-size: 100%;
    font-weight: 60;
    display: inline-block;
-   padding: 10px 20px;
+   /*padding: 10px 20px;*/
+   margin: 10px 20px 10px 20px;
+
+   width: 18vh;
+   height: 7vh;
+   font-size: 2.5vh;
+
    background: var(--primary-color);
    color: #fff;
    border-radius: 1px;
    border: solid #fff 1px;
-   margin-top: 25px;
    opacity: 0.7;
 }
 
 button:hover {
    transform: scale(0.98);
+}
+
+input[type=color] {
+   width: 18vh;
+   height: 7vh;
+   margin: 10px;
 }
 
 ::-webkit-scrollbar { width: 10px; }
@@ -59,11 +61,17 @@ button:hover {
 ::-webkit-scrollbar-track { border-radius: 10px; }
 
 #sticky-sidebar {
-   height: 250px;
+   position: fixed;
+   bottom: 0px;
+
+   background:  rgba(0, 0, 0, 0.4);
+
+   height: 25vh;
+   max-height: 300px;
    width: 100%;
-   padding: 0px;
+   padding: 20px 50px 0px 50px;
    z-index: 50;
-   align-items: center;
+   /*align-items: center;*/
    min-width: 300px;
 }
 
@@ -73,7 +81,6 @@ button:hover {
 }
 
 #inner-container {
-   overflow: auto;
    height: 200px;
 }
 
@@ -121,13 +128,13 @@ button:hover {
 }
 
 .video-container video {
-    min-width: 100%;
-    min-height: 100%;
-    position: absolute;
-    top: 75%;
-    left: 95%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
+   min-width: 100%;
+   min-height: 100%;
+   position: absolute;
+   top: 75%;
+   left: 95%;
+   transform: translate(-50%, -50%);
+   object-fit: cover;
 }
 
 .video-container:after {
@@ -147,34 +154,19 @@ button:hover {
    width: 100%;
 }
 
-#gallery-container {
-   /* background-image: url('https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500'); */
-   background-size: 650px;
-   background-repeat: no-repeat;
-   background-position: center center;
-   
-   /* top: 50%; */
-   /* bottom: 250px; */
-
-   display: flex;
-   justify-content: center;
-   
-   z-index: 1000; 
-   height: 100%;
-   width: 100%;
-   margin-top: 20px;
-}
-
-#photol-list {
-   vertical-align: middle;
-}
-   
 #gallery {
-    background-repeat: no-repeat;
-    background-position: center; 
-    background-size: 650px;
-    display: table-cell;
-    vertical-align: middle;
+   height: 50vh;
+   width: 150vh;
+   background-size: 150vh;
+   background-repeat: no-repeat;
+   background-position: center;
+   /* background-size: 1000px; */
+   display: flex; 
+   justify-content: center;
+   flex-direction: column;
+   z-index: 1000;
+   padding: 20px;
+   border: solid 2px white;
 }
 
 .button-container {
@@ -200,50 +192,38 @@ button:hover {
    height: 250px;
 }
 
-
-body{
-	display: flex;
-  padding-top: 50px;
-  padding-bottom: 50px;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
-}
-
-.parent-selector{
+.parent-selector {
    z-index: 1000;
- 
-  
-  background-color:clear;
-  border-radius: 5px;
-  /*box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);*/
-  padding:20px;
+   /* box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2); */
+   padding: 20px 0px 40px 0px;
+   height: 20vh;
 }
 
-.list-image > img{
-  display: inline-block;
-  margin: 10px;
-  width: 64px;
-  heigth: 64px;
-  cursor: pointer;
+.list-image {
+   display: flex;
+   justify-content: center;
 }
 
-.list-image > img:hover{
-  border: solid 2px #1e88e5;
-  border-radius: 2px;
+.list-image img {
+   display: inline-block;
+   border-radius: 2px;
+   margin: 10px;
+   width: 18vh;
+   height: 7vh;
+   /*height: 64px;*/
+   cursor: pointer;
+   border: solid 2px;
+   border-color: #888888;
 }
 
-.list-image > img.active{
-  border: solid 2px #43a047;
-  border-radius: 2px;
+.list-image img:hover {
+   border-color: #bbbbbb;
 }
 
-.view-image > img{
-  max-width: 128px;
-  max-height: 128px;
-  padding: 10px;
+.list-image img.active {
+   border-color: white;
 }
 
-#button-confirm{
+#button-confirm {
    z-index: 11111;
 }

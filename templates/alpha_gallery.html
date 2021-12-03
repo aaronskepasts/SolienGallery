@@ -10,6 +10,7 @@
    let color;
    let bgim;
    let bgtype;
+
    // Sets the action of the form after submission.
    function redirectToDownload() {
       if (galleryImages.length == 0) {
@@ -32,26 +33,25 @@
    }
 
    let i = 0;
-   function add_img(img_url, id) {
-      if (i < 4) {
-         // creates new image for gallery
-         new_img = new Image();
-         new_img.classList.add("nft-img");
-         new_img.id = id + "gallery";
-         new_img.src = img_url;
-         new_img.addEventListener('click', function () { addToGallery(id, img_url); });
-         document.getElementById("photo-list").appendChild(new_img);
-         // ajusts tracker structures
-         galleryImages.push(document.getElementById(id));
-         walletImages.pop(document.getElementById(id));
-         i = i + 1;
-         console.log(i);
-         console.log(document.getElementById(id).parentNode);
-         document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-      }
+   function addToGallery(img_url, id) {
+      if (i >= 4) { return; } 
+      // creates new image for gallery
+      new_img = new Image();
+      new_img.classList.add("nft-img");
+      new_img.id = id + "gallery";
+      new_img.src = img_url;
+      new_img.addEventListener('click', function () { removeFromGallery(id, img_url); });
+      document.getElementById("photo-list").appendChild(new_img);
+      // ajusts tracker structures
+      galleryImages.push(document.getElementById(id));
+      walletImages.pop(document.getElementById(id));
+      i = i + 1;
+      console.log(i);
+      console.log(document.getElementById(id).parentNode);
+      document.getElementById(id).parentNode.removeChild(document.getElementById(id));
    }
 
-   function addToGallery(id, url) {
+   function removeFromGallery(id, url) {
       console.log("yeet");
       document.getElementById(id + "gallery").parentNode.removeChild(document.getElementById(id + "gallery"));
       walletImages.push(document.getElementById(id));
@@ -61,27 +61,25 @@
       new_img.classList.add("selection-img");
       new_img.id = id;
       new_img.src = url;
-      new_img.addEventListener('click', function () { add_img(url, id); });
+      new_img.addEventListener('click', function () { addToGallery(url, id); });
       document.getElementById('inner-container').appendChild(new_img);
-
    }
 
-   function update_background() {
+   function updateBackground() {
       bgtype = "color";
       color = document.getElementById("colorpicker").value;
       image = "linear-gradient(" + color + ", " + color + ")";
       document.getElementById("gallery").style.backgroundImage = image;
-
    }
 
-   function update_background2(bgimage) {
-      //image = new Image();
-      //image.src = bgimage;
-     // image.id = "galbgimage";
-      //image.classList.add("gallery");
-     // console.log("yeet");
-     // console.log(image.src);
-     // console.log(image.id);
+   function updateBackground2(bgimage) {
+      // image = new Image();
+      // image.src = bgimage;
+      // image.id = "galbgimage";
+      // image.classList.add("gallery");
+      // console.log("yeet");
+      // console.log(image.src);
+      // console.log(image.id);
       bgim = bgimage;
       bgtype = "image";
       document.getElementById("gallery").style.backgroundImage = "url('"+ bgimage+"')";
@@ -94,10 +92,9 @@
    }
 
    function setup() {
-      update_background2("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500");
-     // update_background();
-     // document.getElementById("colorpicker").addEventListener("input", update_background);
-      
+      updateBackground2("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500");
+      // updateBackground();
+      // document.getElementById("colorpicker").addEventListener("input", updateBackground);
    }
 
    $(document).ready(setup);
@@ -129,16 +126,15 @@
                type="video/mp4">
          </video>
       </div>
+
       <!-- Gallery -->
-      <div class="align-items-center" id="gallery-container">
-         <div class="col" id="gallery">
-            <div class="row justify-content-center" id="photo-list">
-            </div>
-         </div>
+      <div id="gallery">
+         <div id="photo-list"></div>
       </div>
 
       <!--Background Selector-->
-      <script>var elementSelected = null;
+      <script>
+         var elementSelected = null;
          var typeSelected = false;
 
          $(document).on('click', '.list-image > img', function () {
@@ -150,68 +146,51 @@
             typeSelected = false;
             console.log("Clicked");
             console.log(elementSelected.attr('src'));
-            update_background2(elementSelected.attr('src'));
+            updateBackground2(elementSelected.attr('src'));
          });
 
 
          $(document).on('click', '#button-confirm', function () {
 
          })
-
       </script>
+
       <div class="parent-selector">
-         <p>Select a Background</p>
          <div class="select-image">
-            <div class="list-image" style= "padding-bottom: 10px;">
+            <div class="list-image">
                <img class="active"
                   src="https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500"
-                  alt="1" />
+                  alt="1">
                <img
                   src="https://www.wallpaperuse.com/wallp/59-595920_m.png"
-                  alt="2" />
+                  alt="2">
                <img
                   src="https://media.musely.com/u/74b2435a-83fc-4a93-afd4-eddecd2f9f76.jpg"
-                  alt="1" />
+                  alt="1">
                <img
                   src="https://www.teahub.io/photos/full/28-289473_twitter-cover-photo-45-stars..jpg"
-                  alt="2" />
-            </div>
-            <!-- Color Wheel -->
-            <div class="container">
-               <div class="row">
-                  <div class="col my-auto">
-                     <form style="z-index: 1; padding: 10px;">
-                        <!-- <label for="colorpicker">Select a Background Color:</label> -->
-                        <input type="color" id="colorpicker"
-                           name="colorpicker" value="#ffffff">
-                     </form>
-                  </div>
-                  <div class="col">
-                     <button onclick="update_background()" style="margin-bottom: 20px">
-                        <span>Apply Color</span></button>
-                  </div>
-               </div>
+                  alt="2">
+               <input type="color" id="colorpicker" value="#ffffff" onchange="updateBackground()" onclick="updateBackground()">
+               <button onclick="redirectToDownload()">Create</button>
             </div>
          </div>
       </div>
-      
-      <!-- Button -->
-      <div class="button-container">
-         <button onclick="redirectToDownload()">Create Gallery</button>
-      </div>
+      <br>
+      <br>
+      <br>
+      <br>
 
       <!-- Sidebar -->
-      <div class="row" id="sticky-sidebar">
-         <div class="col-12">
+      <div id="sticky-sidebar">
+         <div>
             <ul class="list-group m-0 p-0">
                <!-- Image List -->
-               <li class="list-group-item border-0 m-0 p-0"
-                  id="image-container">
+               <li class="list-group-item border-0 m-0 p-0" id="image-container">
                   <div id="inner-container">
                      {% for i in range(search_res|length()) %}
                      <img class="selection-img" id="{{ i }}"
                         src="{{ search_res[i] }}"
-                        onclick="add_img('{{ search_res[i] }}', id)">
+                        onclick="addToGallery('{{ search_res[i] }}', id)">
                      <script type="text/javascript">
                         initialize(document.getElementById(i));
                      </script>
@@ -221,7 +200,6 @@
             </ul>
          </div>
       </div>
-      <br>
    </div>
    </div>
 </body>
