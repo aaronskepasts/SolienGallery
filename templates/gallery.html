@@ -46,18 +46,74 @@
       if (i >= 4) { return; } 
       // creates new image for gallery
       new_img = new Image();
-      new_img.classList.add("nft-img");
+      new_img.classList.add("nftimg");
+      new_img.draggable = true;
       new_img.id = id + "gallery";
       new_img.src = img_url;
       new_img.addEventListener('click', function () { removeFromGallery(id, img_url); });
-      document.getElementById("photo-list").appendChild(new_img);
+      document.getElementById("photolist").appendChild(new_img);
       // ajusts tracker structures
       galleryImages.push(document.getElementById(id));
       walletImages.pop(document.getElementById(id));
       i = i + 1;
-      console.log(i);
-      console.log(document.getElementById(id).parentNode);
+      //console.log(i);
+      //console.log(document.getElementById(id).parentNode);
       document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+      addDraggable();
+   }
+
+   function addDraggable() {
+      console.log("Draggable success");
+      draggables = document.querySelectorAll('.nftimg');
+      console.log(draggables);
+      photolists = document.querySelectorAll('.photolist');
+      console.log(photolists);
+
+
+      draggables.forEach(draggable => {
+         console.log("DragableS");
+         console.log(draggable);
+         draggable.addEventListener('dragstart',() => {
+            draggable.classList.add('dragging');
+         });
+         draggable.addEventListener('dragend',() => {
+            draggable.classList.remove('dragging');
+         });
+         console.log("DragableF");
+         console.log(draggable);
+      });
+
+      photolists.forEach(photolist => {
+         console.log("photolist-S");
+         console.log(photolist);
+         
+         photolist.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(photolist, e.clientX);
+            const draggable = document.querySelector('.dragging');
+            if (afterElement == null) {
+               photolist.appendChild(draggable);
+            } else {
+               photolist.insertBefore(draggable, afterElement);
+            }
+         });
+         console.log("photolist-F");
+         console.log(photolist);
+      });
+
+      function getDragAfterElement(photolist, x) {
+         const draggableElements = [...photolist.querySelectorAll('.draggable:not(.dragging)')]
+         
+         return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect()
+            const offset = x - box.left - box.width / 2
+            if (offset < 0 && offset > closest.offset) {
+               return { offset: offset, element: child }
+            } else {
+               return closest
+         }
+      }, { offset: Number.NEGATIVE_INFINITY }).element
+      }
    }
 
    function removeFromGallery(id, url) {
@@ -136,10 +192,75 @@
          </video>
       </div>
 
+      
+      
+
       <!-- Gallery -->
+      
       <div id="gallery">
-         <div id="photo-list"></div>
+            <div class="photolist" id="photolist"></div>
       </div>
+
+
+
+      <!--Drag and Drop-->
+      <script defer>
+         console.log("Defer success");
+         draggables = document.querySelectorAll('.nftimg');
+         console.log(draggables);
+         photolists = document.querySelectorAll('.photolist');
+         console.log(photolists);
+
+
+         draggables.forEach(draggable => {
+            console.log("DragableS");
+            console.log(draggable);
+            draggables.addEventListener('dragstart',() => {
+               draggable.classList.add('dragging');
+            });
+            draggable.addEventListener('dragend',() => {
+               draggable.classList.remove('dragging');
+            });
+            console.log("DragableF");
+            console.log(draggable);
+         });
+
+         photolists.forEach(photolist => {
+            console.log("photolist-S");
+            console.log(photolist);
+            
+            photolist.addEventListener('dragover', e => {
+               e.preventDefault();
+               const afterElement = getDragAfterElement(photolist, e.clientX);
+               const draggable = document.querySelector('.dragging');
+               if (afterElement == null) {
+                  photolist.appendChild(draggable);
+               } else {
+                  photolist.insertBefore(draggable, afterElement);
+               }
+            });
+            console.log("photolist-F");
+            console.log(photolist);
+         });
+
+         function getDragAfterElement(photolist, x) {
+            const draggableElements = [...photolist.querySelectorAll('.draggable:not(.dragging)')]
+            
+            return draggableElements.reduce((closest, child) => {
+               const box = child.getBoundingClientRect()
+               const offset = x - box.right - box.width / 2
+               if (offset < 0 && offset > closest.offset) {
+                  return { offset: offset, element: child }
+               } else {
+                  return closest
+            }
+         }, { offset: Number.NEGATIVE_INFINITY }).element
+         }
+         
+
+
+      </script>
+
 
       <!--Background Selector-->
       <script>
