@@ -75,12 +75,12 @@ input[type=color] {
    min-width: 300px;
 }
 
-#image-container { 
+#image-container {
    overflow: auto;
    background-color: transparent;
 }
 
-.photolist {
+.nft-gallery {
 
 }
 
@@ -88,7 +88,7 @@ input[type=color] {
    height: 200px;
 }
 
-.selection-img {
+.nft-not-in-gal {
    max-height: calc(var(--height) * var(--scaling-factor));
    max-width: calc(var(--width) * var(--scaling-factor));
    margin-left: 10px;
@@ -98,7 +98,7 @@ input[type=color] {
    transition: .95s ease;
 }
 
-.nftimg {
+.nft-in-gal {
    max-height: calc(var(--height) * var(--nft-factor));
    max-width: calc(var(--width) * var(--nft-factor));
    margin: 20px 12px 20px 12px;
@@ -106,7 +106,11 @@ input[type=color] {
    transition: .95s ease;
 }
 
-.selection-img:hover { opacity: 0.6; }
+.nft-in-gal.dragging {
+  opacity: .5;
+}
+
+.nft-not-in-gal:hover { opacity: 0.6; }
 
 .showcase {
    height: 100vh;
@@ -165,7 +169,7 @@ input[type=color] {
    background-repeat: no-repeat;
    background-position: center;
    /* background-size: 1000px; */
-   display: flex; 
+   display: flex;
    justify-content: center;
    flex-direction: column;
    z-index: 1000;

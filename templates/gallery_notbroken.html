@@ -4,6 +4,8 @@
 <script
    src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+   let walletImages = [];
+   let galleryImages = [];
    let color;
    let bgim;
    let bgtype;
@@ -14,14 +16,17 @@
 
    // Enqueues the creation of a gallery
    function enqueueGallery() {
-      var nft_gallery = document.getElementById("nft-gallery").getElementsByClassName("nft-in-gal")
-      if (nft_gallery.length == 0) {
+      if (galleryImages.length == 0) {
           return;
       }
       let reqUrl = "/enqueue_gallery/"
+      var photolist = document.getElementById("photolist").getElementsByClassName("nft")
+      console.log("here: ");
+      // console.log(photolist);
+      // console.log(photolist[0]);
       let galleryUrls = [];
-      for (var i = 0; i < nft_gallery.length; ++i) {
-          let url = nft_gallery[i].src;
+      for (var i = 0; i < photolist.length; ++i) {
+          let url = photolist[i].src;
           galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
           reqUrl += (i > 0) ? "=" : "";
           reqUrl += galleryUrls[i];
@@ -40,26 +45,30 @@
       });
    }
 
+   let i = 0;
    function addToGallery(img_url, id) {
-      var nft_gallery = document.getElementById("nft-gallery").getElementsByClassName("nft-in-gal")
-      if (nft_gallery.length >= 4) { return; }
-
+      if (i >= 4) { return; }
+      // creates new image for gallery
       new_img = new Image();
-      new_img.classList.add("nft-in-gal");
+      new_img.classList.add("nft");
       new_img.draggable = true;
       new_img.id = id + "gallery";
       new_img.src = img_url;
       new_img.addEventListener('click', function () { removeFromGallery(id, img_url); });
-      document.getElementById("nft-gallery").appendChild(new_img);
+      document.getElementById("photolist").appendChild(new_img);
+      // ajusts tracker structures
+      galleryImages.push(document.getElementById(id));
+      walletImages.pop(document.getElementById(id));
+      i = i + 1;
       //console.log(i);
       //console.log(document.getElementById(id).parentNode);
       document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-      addDraggableGallery();
+      addDraggable();
    }
 
-   function addDraggableGallery() {
-      draggables = document.querySelectorAll('.nft-in-gal');
-      nft_gallery = document.getElementById('nft-gallery');
+   function addDraggable() {
+      draggables = document.querySelectorAll('.nft');
+      photolist = document.getElementById('photolist');
 
       draggables.forEach(draggable => {
          draggable.addEventListener('dragstart',() => {
@@ -70,19 +79,19 @@
          });
       });
 
-      nft_gallery.addEventListener('dragover', e => {
+      photolist.addEventListener('dragover', e => {
           e.preventDefault();
-          const afterElement = getDragAfterElement(nft_gallery, e.clientX);
+          const afterElement = getDragAfterElement(photolist, e.clientX);
           const draggable = document.querySelector('.dragging');
           if (afterElement == null) {
-            nft_gallery.appendChild(draggable);
+            photolist.appendChild(draggable);
           } else {
-            nft_gallery.insertBefore(draggable, afterElement);
+            photolist.insertBefore(draggable, afterElement);
           }
       });
 
-      function getDragAfterElement(nft_gallery, x) {
-         const draggableElements = [...nft_gallery.querySelectorAll('.nft-in-gal:not(.dragging)')]
+      function getDragAfterElement(photolist, x) {
+         const draggableElements = [...photolist.querySelectorAll('.nft:not(.dragging)')]
          console.log(draggableElements);
          return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect()
@@ -98,17 +107,15 @@
 
    function removeFromGallery(id, url) {
       document.getElementById(id + "gallery").parentNode.removeChild(document.getElementById(id + "gallery"));
+      walletImages.push(document.getElementById(id));
+      galleryImages.pop(document.getElementById(id));
+      i = i - 1;
       new_img = new Image();
-      new_img.classList.add("nft-not-in-gal");
+      new_img.classList.add("selection-img");
       new_img.id = id;
       new_img.src = url;
       new_img.addEventListener('click', function () { addToGallery(url, id); });
       document.getElementById('inner-container').appendChild(new_img);
-      addDraggableWallet()
-   }
-
-   function addDraggableWallet() {
-
    }
 
    function updateBackground() {
@@ -130,6 +137,11 @@
       bgtype = "image";
       document.getElementById("gallery").style.backgroundImage = "url('"+ bgimage+"')";
       console.log("success");
+   }
+
+   function initialize(walletItem) {
+      walletImages.push(walletItem);
+      console.log(walletImages.length);
    }
 
    function setup() {
@@ -171,7 +183,7 @@
       <!-- Gallery -->
 
       <div id="gallery">
-            <div class="nft-gallery" id="nft-gallery"></div>
+            <div class="photolist" id="photolist"></div>
       </div>
 
       <!--Background Selector-->
@@ -230,9 +242,12 @@
                <li class="list-group-item border-0 m-0 p-0" id="image-container">
                   <div id="inner-container">
                      {% for i in range(search_res|length()) %}
-                     <img class="nft-not-in-gal" id="{{ i }}"
+                     <img class="selection-img" id="{{ i }}"
                         src="{{ search_res[i] }}"
                         onclick="addToGallery('{{ search_res[i] }}', id)">
+                     <script type="text/javascript">
+                        initialize(document.getElementById(i));
+                     </script>
                      {% endfor %}
                   </div>
                </li>
