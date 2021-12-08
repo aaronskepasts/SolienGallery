@@ -54,10 +54,10 @@
       //console.log(i);
       //console.log(document.getElementById(id).parentNode);
       document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-      addDraggableGallery();
+      addDraggableInGallery();
    }
 
-   function addDraggableGallery() {
+   function addDraggableInGallery() {
       draggables = document.querySelectorAll('.nft-in-gal');
       nft_gallery = document.getElementById('nft-gallery');
 
@@ -83,7 +83,7 @@
 
       function getDragAfterElement(nft_gallery, x) {
          const draggableElements = [...nft_gallery.querySelectorAll('.nft-in-gal:not(.dragging)')]
-         console.log(draggableElements);
+         // console.log(draggableElements);
          return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect()
             const offset = x - box.left - box.width / 2
@@ -104,11 +104,72 @@
       new_img.src = url;
       new_img.addEventListener('click', function () { addToGallery(url, id); });
       document.getElementById('inner-container').appendChild(new_img);
-      addDraggableWallet()
+      addDraggableToGallery()
+   }
+   counter = 0;
+   // think calling in excess but fine for now. -Aaron
+   function addDraggableToGallery() {
+     draggables = document.querySelectorAll('.nft-not-in-gal');
+     nft_gallery = document.getElementById('nft-gallery');
+
+     draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart',() => {
+           draggable.classList.add('dragging');
+        });
+        draggable.addEventListener('dragend',() => {
+           draggable.classList.remove('dragging');
+        });
+     });
+
+     nft_gallery.addEventListener('dragover', e => {
+        // counter = counter + 1;
+        // if (counter >= 1){ return}
+       // don't add NFT to gallery if 4 in gallery already
+        // num_nfts_in_gallery = document.getElementById('nft-gallery').getElementsByClassName("nft-in-gal").length
+        // if (num_nfts_in_gallery >= 4) { return; }
+        // console.log("length: " + length.length);
+        // console.log('here');
+
+         e.preventDefault();
+         const afterElement = getDragAfterElement(nft_gallery, e.clientX);
+         const draggable = document.querySelector('.dragging');
+         const nft_in_gal = toInGal(draggable)
+         console.log(nft_in_gal);
+         document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+         if (afterElement == null) {
+           nft_gallery.appendChild(nft_in_gal);
+         } else {
+           nft_gallery.insertBefore(nft_in_gal, afterElement);
+         }
+
+     });
+
+     function getDragAfterElement(nft_gallery, x) {
+        const draggableElements = [...nft_gallery.querySelectorAll('.nft-in-gal:not(.dragging)')]
+        // console.log(draggableElements);
+        console.log(nft_gallery.length);
+        console.log("x");
+        return draggableElements.reduce((closest, child) => {
+           const box = child.getBoundingClientRect()
+           const offset = x - box.left - box.width / 2
+           if (offset < 0 && offset > closest.offset) {
+              return { offset: offset, element: child }
+           } else {
+              return closest
+        }
+     }, { offset: Number.NEGATIVE_INFINITY }).element
+     }
    }
 
-   function addDraggableWallet() {
-
+   function toInGal(nft_not_in_gal) {
+     console.log('hi');
+     new_img = new Image();
+     new_img.classList.add("nft-in-gal");
+     new_img.draggable = true;
+     new_img.id = nft_not_in_gal.id + "gallery";
+     new_img.src = nft_not_in_gal.img_url;
+     console.log(new_img);
+     return new_img;
    }
 
    function updateBackground() {
@@ -232,9 +293,14 @@
                      {% for i in range(search_res|length()) %}
                      <img class="nft-not-in-gal" id="{{ i }}"
                         src="{{ search_res[i] }}"
-                        onclick="addToGallery('{{ search_res[i] }}', id)">
+                        onclick="addToGallery('{{ search_res[i] }}', id)"
+                        draggable = true>
                      {% endfor %}
+                     <script type="text/javascript">
+                        addDraggableToGallery();
+                     </script>
                   </div>
+
                </li>
             </ul>
          </div>

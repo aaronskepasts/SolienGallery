@@ -96,7 +96,13 @@ input[type=color] {
    margin-bottom:20px;
   /* border-radius: 5px;*/
    transition: .95s ease;
+   cursor: move;
 }
+
+.nft-not-in-gal.dragging {
+  opacity: .5;
+}
+
 
 .nft-in-gal {
    max-height: calc(var(--height) * var(--nft-factor));
