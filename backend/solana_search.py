@@ -87,18 +87,27 @@ def search(request):
 
 		# Return the NFTs as custom objects in a SearchResponse.
 		nft_list = []
+		
+		# 4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R is not cached ex
+		not_cached = "4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R"
 
 		for address in solien_addresses:
-			# Retrieve the metadata at the given address via a call to
-			# the Blockchain API.
-			# nft_metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
-			# 	mint_address=address,
-			# 	network=SolanaNetwork.MAINNET_BETA
-			# )
-			cached_nft_location = "cache/soliens/" + address + ".json"
-			with open(cached_nft_location) as metadata_json:
-			    metadata = json.load(metadata_json)
-			nft_list.append(SolanaNFT(address, metadata))
+			if address == not_cached:
+				metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
+					mint_address=address,
+					network=SolanaNetwork.MAINNET_BETA
+				)
+				new = True
+				tempNFT = SolanaNFT(address, metadata, new)
+
+			else:
+				cached_nft_location = "cache/soliens/" + address + ".json"
+				with open(cached_nft_location) as metadata_json:
+					metadata = json.load(metadata_json)
+				tempNFT = SolanaNFT(address, metadata)
+			
+			nft_list.append(tempNFT)
+
 		return SearchResponse(nft_list)
 
 	except Exception as ex:
