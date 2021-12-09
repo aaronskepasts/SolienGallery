@@ -7,8 +7,8 @@ from theblockchainapi import TheBlockchainAPIResource, SolanaNetwork
 #-----------------------------------------------------------------------
 
 # Blockchain API key pair
-MY_API_KEY_ID = "pMHP8YsDR1EeXhf"
-MY_API_SECRET_KEY = "I3VNE5S4vYa1QuX"
+MY_API_KEY_ID = "brjbocMml5P7nRz"
+MY_API_SECRET_KEY = "gveLuYKpJNUohbR"
 BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 	api_key_id=MY_API_KEY_ID,
 	api_secret_key=MY_API_SECRET_KEY
@@ -87,7 +87,7 @@ def search(request):
 
 		# Return the NFTs as custom objects in a SearchResponse.
 		nft_list = []
-		
+
 		# 4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R is not cached ex
 		not_cached = "4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R"
 
@@ -105,7 +105,7 @@ def search(request):
 				with open(cached_nft_location) as metadata_json:
 					metadata = json.load(metadata_json)
 				tempNFT = SolanaNFT(address, metadata)
-			
+
 			nft_list.append(tempNFT)
 
 		return SearchResponse(nft_list)
