@@ -229,3 +229,8 @@ input[type=text]:focus {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
+
+.download-preview {
+    width: 160vh;
+    border: solid 2px white;
+}
