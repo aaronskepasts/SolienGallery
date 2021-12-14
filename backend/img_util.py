@@ -34,9 +34,7 @@ class Image:
         response = requests.get(url)
         self.img = PilImage.open(BytesIO(response.content))
         (self.w, self.h) = self.img.size
-    
 
-    # where to use?
     def loadColor(self, color):
         self.generate((1500, 500), color=color)
     
@@ -45,8 +43,8 @@ class Image:
 
     # Loads image from a path.
     def open(self, path):
-    	self.img = PilImage.open(path)
-    	(self.w, self.h) = self.img.size
+        self.img = PilImage.open(path)
+        (self.w, self.h) = self.img.size
 
     # Rescale the dimensions of the image by scale.
     def rescale(self, scale):
@@ -60,12 +58,13 @@ class Image:
     #       shaped images.
     def overlay(self, others):
         n = len(others)
-        padding = round((self.w - n * others[0].w) / (n + 1))
+        margin = 40  # Space between photos
         height = round((self.h - others[0].h) / 2)
+        width  = round((self.w - n * others[0].w - (n - 1) * margin) / 2)
         for i, other in enumerate(others):
-            width = (i + 1) * padding + i * other.w
             coords = (width, height)
             self.img.paste(other.img, coords)
+            width = round(width + other.w + margin)
 
     # Uploads the image and returns its URL. 
     def upload(self):
