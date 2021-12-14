@@ -45,6 +45,25 @@ h3 {
     margin-bottom: 15px;
 }
 
+h4 {
+    font-weight: 60;
+    font-size: 15px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+
+.arrow {
+border: solid white;
+border-width: 0 4px 4px 0;
+display: inline-block;
+padding: 5px;
+}
+
+.downarrow {
+transform: rotate(45deg);
+-webkit-transform: rotate(45deg);
+}
+
 .showcase {
     height: 100vh;
     display: flex;
