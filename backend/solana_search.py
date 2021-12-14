@@ -1,7 +1,5 @@
 import json
 from sys import stderr
-
-
 from .solana_util import SearchResponse, SolanaNFT
 from theblockchainapi import TheBlockchainAPIResource, SolanaNetwork
 import urllib.request
@@ -27,6 +25,8 @@ def parse_err(ex):
 		err_message = "The specified wallet number could not be found."
 	elif "[test]" in ex:
 		err_message = ex[:-6]  # Remove [test] tag.
+	elif "no Solien" in ex:
+		err_message = "Wallet contains no Solien NFTs"
 	return err_message
 
 #-----------------------------------------------------------------------
@@ -52,11 +52,11 @@ def get_data_from_url(data_url):
 def search(request):
 	# Retrieve the NFTs from the given wallet.
 	try:
-		# Hard-coded error.
+		# Hard-coded test error.
 		if request.wallet == "error":
 			raise Exception("Error Message.[test]")
 
-		# Hard-coded general use case.
+		# Hard-coded test wallet.
 		if request.wallet == "aaron":
 			nft_list = []
 			address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
@@ -68,16 +68,13 @@ def search(request):
 					"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
 				}
 			}
-
 			for i in range(10):
 				nft_list.append(SolanaNFT(address, metadata))
-
 			return SearchResponse(nft_list)
 
-		# Retrieve the NFTs via a call to the Blockchain API.
-		# Examples:
-		#    "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (aaron)
-		#    "6KQDNrJoPJRa1UHX7C4Wf5FHgjvnswLMTePyUTySFKeQ" (other)
+		# Retrieve the NFTs in wallet via a call to the Blockchain API.
+		# Example wallet public_key:
+		#    "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (Aaron's Wallet)
 
 		public_key = request.wallet
 		nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
@@ -95,13 +92,19 @@ def search(request):
 		# Filter out non-Solien NFT addresses.
 		solien_addresses = query_soliens(nft_addresses)
 
+		# Raise exception if no Solien addresses in wallet
+		if len(solien_addresses) == 0:
+			error_message = "Wallet contains no Solien NFTs"
+			raise Exception(error_message)
+
 		# Return the NFTs as custom objects in a SearchResponse.
 		nft_list = []
 
-		# 4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R is not cached ex
+		# 4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R is not cached Solien NFT
 		not_cached = "4SU7eEW4ELxE4At9TZ1ftNT8wvXLKA8p6yR2bc3bc86R"
 
 		for address in solien_addresses:
+			# If NFT is not cached, retrieve metadata from blockchain
 			if address == not_cached:
 				metadata = BLOCKCHAIN_API_RESOURCE.get_nft_metadata(
 					mint_address=address,
@@ -112,6 +115,7 @@ def search(request):
 				metadata = get_data_from_url(metadata['data']['uri'])
 				tempNFT = SolanaNFT(address, metadata)
 
+			# If NFT is cached, retrieve metadata from cache
 			else:
 				cached_nft_location = "cache/soliens/" + address + ".json"
 				with open(cached_nft_location) as metadata_json:
