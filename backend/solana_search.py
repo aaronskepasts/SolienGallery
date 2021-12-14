@@ -26,7 +26,7 @@ def parse_err(ex):
 	elif "[test]" in ex:
 		err_message = ex[:-6]  # Remove [test] tag.
 	elif "no Solien" in ex:
-		err_message = "Wallet contains no Solien NFTs"
+		err_message = "Wallet contains no Solien NFTs."
 	return err_message
 
 #-----------------------------------------------------------------------

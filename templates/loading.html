@@ -27,7 +27,8 @@
       }
       // Redirect to error page if task failed.
       else if (data.status == "failed") {
-         window.location.href = "{{ url_for('error', status_code='404') }}";
+         err_code = data.response;
+         window.location.href = "/error?status_code=" + err_code;
       }
       // Otherwise, poll the queue in another half a second.
       else {
@@ -51,7 +52,8 @@
       }
       // Redirect to error page if task failed.
       else if (data.status == "failed") {
-         window.location.href = "{{ url_for('error', status_code='404') }}";
+         err_code = data.response;
+         window.location.href = "/error?status_code=" + err_code;
       }
       // Otherwise, poll the queue in another half a second.
       else {

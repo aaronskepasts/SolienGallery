@@ -31,6 +31,33 @@ q = Queue(connection=conn)
 
 #-----------------------------------------------------------------------
 
+# Map between error messages and their corresponding codes.
+error_message_code_map = [
+    ("Wallet contains no Solien NFTs.", "400"),
+    ("The specified wallet number could not be found.", "404"),
+    ("Cannot process call to blockchain.", "503"),
+    ("A server error has occurred.", "500")
+]
+
+# Returns the error code corresponding to the exception.
+def get_error_code(ex):
+    ex_str = str(ex)
+    for (err_message, err_code) in error_message_code_map:
+        if err_message == ex_str:
+            return err_code
+    # Return last error code by default.
+    return error_message_code_map[-1][1]
+
+# Returns the error message corresponding to the code.
+def get_error_message(code):
+    for (err_message, err_code) in error_message_code_map:
+        if err_code == code:
+            return err_message
+    # Return last error message by default.
+    return error_message_code_map[-1][0]
+
+#-----------------------------------------------------------------------
+
 # Helper function to format the details of a background task in JSON.
 def format_task_details(status, response):
     return jsonify({"status": status, "response": response})
@@ -53,6 +80,12 @@ def index():
 
 #-----------------------------------------------------------------------
 
+# Returns the exception encountered while executing the given job.
+def get_exception(job):
+    exc_keyword = "Exception: "
+    exc_index = job.exc_info.rindex(exc_keyword)
+    return job.exc_info[exc_index + len(exc_keyword):].strip()
+
 # Returns the status of the job with the given ID.
 @app.route("/status/<string:page>/<string:job_id>", methods=["GET"])
 def job_status(page, job_id):
@@ -60,17 +93,21 @@ def job_status(page, job_id):
         job = q.fetch_job(job_id)
         if not job:
             return format_task_details("unknown", "")
-        elif not job.result:
-            return format_task_details(job.get_status(), "")
 
-        job_result = job.result
-        if page == "gallery":
-            job_result = job_result.json()
-        return format_task_details(job.get_status(), job_result)
+        status = job.get_status()
+        if status == "failed":
+            ex_info  = get_exception(job)
+            err_code = get_error_code(ex_info) 
+            return format_task_details("failed", err_code)
+        elif not job.result:
+            return format_task_details(status, "")
+
+        result = job.result.json() if page == "gallery" else job.result
+        return format_task_details(status, result)
 
     except Exception as ex:
         print(ex, file=stderr)
-        return format_task_details("failed", str(ex))
+        return format_task_details("failed", get_error_code(str(ex)))
 
 #-----------------------------------------------------------------------
 
@@ -180,16 +217,10 @@ def download(id_strs):
 
 #-----------------------------------------------------------------------
 
-# Parses an error status code.
-def get_error(status_code):
-    if status_code == "404":
-        return "Wallet not found."
-    return default_err
-
 # Renders and returns the error page.
 @app.route("/error", methods=["GET"])
 def error():
     status_code = request.args.get("status_code")
     html = render_template(frontend_path + "error.html",
-                           error_message=get_error(status_code))
+                           error_message=get_error_message(status_code))
     return make_response(html)
