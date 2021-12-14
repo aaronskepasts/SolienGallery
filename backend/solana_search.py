@@ -1,8 +1,10 @@
 import json
 from sys import stderr
 
+
 from .solana_util import SearchResponse, SolanaNFT
 from theblockchainapi import TheBlockchainAPIResource, SolanaNetwork
+import urllib.request
 
 #-----------------------------------------------------------------------
 
@@ -35,6 +37,14 @@ def query_soliens(nft_addresses):
 	    soliens = json.load(solien_address)
 	solien_addresses = [nft for nft in nft_addresses if nft in soliens]
 	return solien_addresses
+
+#-----------------------------------------------------------------------
+
+# get data (with image field) given metadata
+def get_data_from_url(data_url):
+    with urllib.request.urlopen(data_url) as url:
+        data = json.loads(url.read().decode())
+        return(data)
 
 #-----------------------------------------------------------------------
 
@@ -97,8 +107,10 @@ def search(request):
 					mint_address=address,
 					network=SolanaNetwork.MAINNET_BETA
 				)
-				new = True
-				tempNFT = SolanaNFT(address, metadata, new)
+
+				# get data from metadata which contains the image field
+				metadata = get_data_from_url(metadata['data']['uri'])
+				tempNFT = SolanaNFT(address, metadata)
 
 			else:
 				cached_nft_location = "cache/soliens/" + address + ".json"
