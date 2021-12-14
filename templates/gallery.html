@@ -25,7 +25,6 @@
           galleryUrls[i] = url.substring(url.lastIndexOf('/') + 1);
           reqUrl += (i > 0) ? "=" : "";
           reqUrl += galleryUrls[i];
-          console.log(reqUrl);
       }
 
       document.cookie = "color=" + color + "; path=" + reqUrl;
@@ -40,23 +39,23 @@
       });
    }
 
+   // add NFT to gallery
    function addToGallery(img_url, id) {
-      var nft_gallery = document.getElementById("nft-gallery").getElementsByClassName("nft-in-gal")
-      if (nft_gallery.length >= 4) { return; }
+      var nfts_in_gal = document.getElementById("nft-gallery").getElementsByClassName("nft-in-gal")
+      if (nfts_in_gal.length >= 4) { return; }
 
-      new_img = new Image();
-      new_img.classList.add("nft-in-gal");
-      new_img.draggable = true;
-      new_img.id = id + "gallery";
-      new_img.src = img_url;
-      new_img.addEventListener('click', function () { removeFromGallery(id, img_url); });
-      document.getElementById("nft-gallery").appendChild(new_img);
-      //console.log(i);
-      //console.log(document.getElementById(id).parentNode);
+      new_nft_in_gal = new Image();
+      new_nft_in_gal.classList.add("nft-in-gal");
+      new_nft_in_gal.draggable = true;
+      new_nft_in_gal.id = id + "gallery";
+      new_nft_in_gal.src = img_url;
+      new_nft_in_gal.addEventListener('click', function () { removeFromGallery(id, img_url); });
+      document.getElementById("nft-gallery").appendChild(new_nft_in_gal);
       document.getElementById(id).parentNode.removeChild(document.getElementById(id));
       addDraggableInGallery();
    }
 
+   // make NFTs in gallery draggable to change order
    function addDraggableInGallery() {
       draggables = document.querySelectorAll('.nft-in-gal');
       nft_gallery = document.getElementById('nft-gallery');
@@ -83,7 +82,6 @@
 
       function getDragAfterElement(nft_gallery, x) {
          const draggableElements = [...nft_gallery.querySelectorAll('.nft-in-gal:not(.dragging)')]
-         // console.log(draggableElements);
          return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect()
             const offset = x - box.left - box.width / 2
@@ -96,97 +94,27 @@
       }
    }
 
+   // Remove NFT from gallery to bottom view
    function removeFromGallery(id, url) {
       document.getElementById(id + "gallery").parentNode.removeChild(document.getElementById(id + "gallery"));
-      new_img = new Image();
-      new_img.classList.add("nft-not-in-gal");
-      new_img.id = id;
-      new_img.src = url;
-      new_img.addEventListener('click', function () { addToGallery(url, id); });
-      document.getElementById('inner-container').appendChild(new_img);
-      addDraggableToGallery()
-   }
-   counter = 0;
-   // think calling in excess but fine for now. -Aaron
-   function addDraggableToGallery() {
-     draggables = document.querySelectorAll('.nft-not-in-gal');
-     nft_gallery = document.getElementById('nft-gallery');
-
-     draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart',() => {
-           draggable.classList.add('dragging');
-        });
-        draggable.addEventListener('dragend',() => {
-           draggable.classList.remove('dragging');
-        });
-     });
-
-     nft_gallery.addEventListener('dragover', e => {
-        // counter = counter + 1;
-        // if (counter >= 1){ return}
-       // don't add NFT to gallery if 4 in gallery already
-        // num_nfts_in_gallery = document.getElementById('nft-gallery').getElementsByClassName("nft-in-gal").length
-        // if (num_nfts_in_gallery >= 4) { return; }
-        // console.log("length: " + length.length);
-        // console.log('here');
-
-         e.preventDefault();
-         const afterElement = getDragAfterElement(nft_gallery, e.clientX);
-         const draggable = document.querySelector('.dragging');
-         const nft_in_gal = toInGal(draggable)
-         console.log(nft_in_gal);
-         document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-         if (afterElement == null) {
-           nft_gallery.appendChild(nft_in_gal);
-         } else {
-           nft_gallery.insertBefore(nft_in_gal, afterElement);
-         }
-
-     });
-
-     function getDragAfterElement(nft_gallery, x) {
-        const draggableElements = [...nft_gallery.querySelectorAll('.nft-in-gal:not(.dragging)')]
-        // console.log(draggableElements);
-        console.log(nft_gallery.length);
-        console.log("x");
-        return draggableElements.reduce((closest, child) => {
-           const box = child.getBoundingClientRect()
-           const offset = x - box.left - box.width / 2
-           if (offset < 0 && offset > closest.offset) {
-              return { offset: offset, element: child }
-           } else {
-              return closest
-        }
-     }, { offset: Number.NEGATIVE_INFINITY }).element
-     }
+      new_nft_not_in_gal = new Image();
+      new_nft_not_in_gal.classList.add("nft-not-in-gal");
+      new_nft_not_in_gal.id = id;
+      new_nft_not_in_gal.src = url;
+      new_nft_not_in_gal.addEventListener('click', function () { addToGallery(url, id); });
+      document.getElementById('inner-container').appendChild(new_nft_not_in_gal);
    }
 
-   function toInGal(nft_not_in_gal) {
-     console.log('hi');
-     new_img = new Image();
-     new_img.classList.add("nft-in-gal");
-     new_img.draggable = true;
-     new_img.id = nft_not_in_gal.id + "gallery";
-     new_img.src = nft_not_in_gal.img_url;
-     console.log(new_img);
-     return new_img;
-   }
-
-   function updateBackground() {
+   // Update gallery background to a color
+   function updateBackgroundColor() {
       bgtype = "color";
       color = document.getElementById("colorpicker").value;
       image = "linear-gradient(" + color + ", " + color + ")";
       document.getElementById("gallery").style.backgroundImage = image;
    }
 
-   function updateBackground2(bgimage) {
-      // image = new Image();
-      // image.src = bgimage;
-      // image.id = "galbgimage";
-      // image.classList.add("gallery");
-      // console.log("yeet");
-      // console.log(image.src);
-      // console.log(image.id);
+   // Update gallery background to an image
+   function updateBackgroundImage(bgimage) {
       bgim = bgimage;
       bgtype = "image";
       document.getElementById("gallery").style.backgroundImage = "url('"+ bgimage+"')";
@@ -194,9 +122,7 @@
    }
 
    function setup() {
-      updateBackground2("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500");
-      // updateBackground();
-      // document.getElementById("colorpicker").addEventListener("input", updateBackground);
+      updateBackgroundImage("https://pbs.twimg.com/profile_banners/1427360637408120837/1633464733/1500x500");
    }
 
    $(document).ready(setup);
@@ -216,7 +142,6 @@
       href="{{ url_for('static', filename='images/favicon.ico') }}">
    <meta name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 </head>
 
 <body>
@@ -230,7 +155,6 @@
       </div>
 
       <!-- Gallery -->
-
       <div id="gallery">
             <div class="nft-gallery" id="nft-gallery"></div>
       </div>
@@ -247,14 +171,10 @@
             $(this).addClass('active');
             elementSelected = $(this);
             typeSelected = false;
-            console.log("Clicked");
-            console.log(elementSelected.attr('src'));
-            updateBackground2(elementSelected.attr('src'));
+            updateBackgroundImage(elementSelected.attr('src'));
          });
 
-
          $(document).on('click', '#button-confirm', function () {
-
          })
       </script>
 
@@ -270,12 +190,12 @@
                <img
                   src="https://media.musely.com/u/74b2435a-83fc-4a93-afd4-eddecd2f9f76.jpg"
                   alt="1">
-               
-                 
+
+
                  <img src= "https://www.setaswall.com/wp-content/uploads/2017/11/Twitter-Cover-Photo-24-1500x500.jpg"
                  alt="2">
                  <!-- "https://thelifeofsammiiejayyy.com/wp-content/uploads/2019/11/Purple-Space-Twitter-Header.jpg" -->
-               <input type="color" id="colorpicker" value="#ffffff" onchange="updateBackground()" onclick="updateBackground()">
+               <input type="color" id="colorpicker" value="#ffffff" onchange="updateBackgroundColor()" onclick="updateBackgroundColor()">
                <button onclick="enqueueGallery()">Create</button>
             </div>
          </div>
@@ -295,12 +215,9 @@
                      {% for i in range(search_res|length()) %}
                      <img class="nft-not-in-gal" id="{{ i }}"
                         src="{{ search_res[i] }}"
-                        onclick="addToGallery('{{ search_res[i] }}', id)"
-                        draggable = true>
+                        onclick="addToGallery('{{ search_res[i] }}', id)">
                      {% endfor %}
-                    
                   </div>
-
                </li>
             </ul>
          </div>

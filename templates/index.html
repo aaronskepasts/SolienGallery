@@ -11,7 +11,7 @@
    function enqueueSearch() {
       let wallet = $("#wallet")[0].value;
       if (!wallet) { return; }
-      
+
       let reqUrl = "/enqueue_search/" + wallet;
       $.ajax({
          type: "GET",
@@ -51,7 +51,7 @@
       <center>
          <table>
             <tr>
-               <td><br><input type="text" id="wallet" placeholder="Wallet Number"></td>
+               <td><br><input type="text" id="wallet" placeholder="Wallet Address"></td>
                <td style="padding: 10px"></td>
                <td><button onclick="enqueueSearch()">Search</button></td>
             </tr>
@@ -66,7 +66,7 @@
 
       <p>This is the Solien Gallery, a project for COS 333 at Princeton University. We want to help Solien NFT owners show off their coolest Soliens with a custom Twitter banner.</p>
       <p>Enter your wallet number above to get started.</p>
-      
+
       <a href="mailto:soliengallery@gmail.com">Contact us at soliengallery@gmail.com!</a>
       <br>
    </center>
