@@ -36,29 +36,9 @@ def runclient(tests):
         print("\nYou selected: " + tests[int(response)]+ " tests!")
     
     return int(response)
-#-----------------------------------------------------------------------
-# runs coverage tests
-
-def test_coverage():
-    print("*************************************")
-    print("Conducting statement tests:")
-    active_dir = os.getcwd()
-    os.system("echo active directory = "+ active_dir)
-    os.system("echo 1")
-    os.system("set -o verbose")
-    os.system("echo 2")
-    os.system("redis-server &")
-    os.system("echo 3")
-    os.system("python3 worker.py &")
-    os.system("echo 4")
-    os.system("python3 -m coverage run -p --source=. runserver.py 8080")
-    #os.system("python3 -m coverage run -p server.py")
-    os.system("python3 -m coverage html")
-    print("*************************************\n")
 
 #-----------------------------------------------------------------------
 # runs stress tests
-
 
 def test_stress():
     
@@ -80,7 +60,7 @@ def test_stress():
                 reslist.append(r.status_code)
         
         tlist = list()
-        numRequests = 10    
+        numRequests = 50    
         print("Initiating child threads for index\n")    
         for i in range(numRequests):
             tlist.append(sendrequest())
@@ -114,7 +94,7 @@ def test_stress():
                 reslist.append(r.status_code)
         
         tlist = list()
-        numRequests = 10    
+        numRequests = 50    
         print("Initiating child threads for bad index\n")    
         for i in range(numRequests):
             tlist.append(sendrequest())
@@ -149,7 +129,7 @@ def test_stress():
                 reslist.append(r.status_code)
         
         tlist = list()
-        numRequests = 10    
+        numRequests = 50    
         print("Initiating child threads for gallery\n")    
         for i in range(numRequests):
             tlist.append(sendrequest())
@@ -184,8 +164,218 @@ def test_stress():
                 reslist.append(r.status_code)
         
         tlist = list()
-        numRequests = 10    
+        numRequests = 50    
         print("Initiating child threads for bad gallery\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+    def test_loading_g():
+        print()
+        print("*************************************")
+        print("Testing the load page for the gallery:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/loading/gallery/e7fa4c33-01a8-4a07-9101-1651c2a442dc")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for gallery loading page\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+    
+        
+    def test_loading_bad_g():
+        print()
+        print("*************************************")
+        print("Testing the bad load page for the gallery loading page:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/loading/gallery/wthwjrewtydta")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for bad gallery loading page\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+
+    #note this will always not load correctly sinse the link expires after a period of time
+    def test_loading_d():
+        print()
+        print("*************************************")
+        print("Testing the loading page for downloads:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/status/download/d820c17d-b0c6-4813-9810-82796484729b")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for download load\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+    def test_loading_bad_d():
+        print()
+        print("*************************************")
+        print("Testing the loading page for bad downloads:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/status/download/yeyeyeye")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for bad download load\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+
+    def test_loading_e():
+        print()
+        print("*************************************")
+        print("Testing the loading page for enqueue gallery:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/enqueue_gallery/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU=QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU=QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU=QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for enqueue gallery\n")    
+        for i in range(numRequests):
+            tlist.append(sendrequest())
+            tlist[i].start()
+        
+        for i in range (numRequests):
+            tlist[i].join()
+
+        boolean = False
+        for i in range(len(reslist)):
+            if reslist[i] != reslist[0]:
+                print("Different html status codes")
+                print(reslist[0]+ "    " + reslist[1])
+                boolean = True
+        if boolean == False:
+            print("All html status codes = "+ str(reslist[0])+"\n")
+
+        print("Main Thread Terminated\n")
+
+
+    def test_loading_bad_e():
+        print()
+        print("*************************************")
+        print("Testing the bad enqueue page:\n")
+        reslist = list()
+        class sendrequest(Thread):
+            def __init__(self):
+                Thread.__init__(self)
+            
+            def run(self):
+                r = requests.get("https://sol333.herokuapp.com/enqueue_gallery/yeeeeeeet")
+                reslist.append(r.status_code)
+        
+        tlist = list()
+        numRequests = 50    
+        print("Initiating child threads for bad gallery enqueue\n")    
         for i in range(numRequests):
             tlist.append(sendrequest())
             tlist[i].start()
@@ -205,10 +395,19 @@ def test_stress():
         print("Main Thread Terminated\n")
         print("*************************************")
 
+        
+
     test_index()
     test_index_bad()
     test_gallery()
     test_gallery_bad()
+    test_loading_bad_e()
+    test_loading_e()
+    test_loading_bad_d()
+    test_loading_d()
+    test_loading_bad_g()
+    test_loading_g()
+
 
 #-----------------------------------------------------------------------
 # Empty Image object unit test
@@ -282,7 +481,6 @@ class genTest(imgtests):
         else:
             print("\tRescale heights fail!")
         self.assertEqual(x,y, "Rescale test failed")
-        
 
 #-----------------------------------------------------------------------
 
@@ -291,34 +489,26 @@ def test_units():
     print("Standby Please...\n")
     unittest.main()
       
-
 #-----------------------------------------------------------------------
 
 def gucci_main():
     tests = list()
     tests.append("Statement") #0
-    tests.append("Path") #1
-    tests.append("Boundry") #2
-    tests.append("Stress") #3
-    tests.append("Coverage") #4
+    tests.append("Stress") #3 
     tests.append("Unit") #5
 
     testType = runclient(tests)
 
-    if testType == 0:
-        test_coverage()
-        print("Statement Tests Complete") 
-
-    if testType == 3:
+    if testType == 1:
         test_stress()
         print ("Stress Tests Complete")
 
 
-    if testType == 5:
+    if testType == 2:
         test_units()
         print("Unit Tests Complete")
     
-    if testType == 6:
+    if testType == 3:
         
         test_stress()
         print ("Stress Tests Complete")
