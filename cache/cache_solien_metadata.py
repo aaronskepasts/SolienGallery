@@ -13,6 +13,7 @@ BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 )
 
 def get_data_from_url(data_url):
+    assert(data_url != None)
     with urllib.request.urlopen(data_url) as url:
         data = json.loads(url.read().decode())
         return(data)

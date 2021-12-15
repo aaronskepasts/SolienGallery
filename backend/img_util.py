@@ -26,28 +26,34 @@ class Image:
 
     # Generates an image with the given size and color (and color mode).
     def generate(self, size, color=0, mode="RGB"):
+        assert(size != None)
         self.img = PilImage.new(mode, size, color)
         (self.w, self.h) = size
 
     # Loads image from a URL.
     def loadURL(self, url):
+        assert(url != None)
         response = requests.get(url)
         self.img = PilImage.open(BytesIO(response.content))
         (self.w, self.h) = self.img.size
 
     def loadColor(self, color):
+        assert(color != None)
         self.generate((1500, 500), color=color)
     
     def loadImage(self, image):
+        assert(image != None)
         self.img = image
 
     # Loads image from a path.
     def open(self, path):
+        assert(path != None)
         self.img = PilImage.open(path)
         (self.w, self.h) = self.img.size
 
     # Rescale the dimensions of the image by scale.
     def rescale(self, scale):
+        assert(scale != None)
         self.w = round(scale * self.w)
         self.h = round(scale * self.h)
         self.img = self.img.resize((self.w, self.h))
@@ -57,6 +63,7 @@ class Image:
     #       same size. We need to address how we handle differently
     #       shaped images.
     def overlay(self, others):
+        assert(others != None)
         n = len(others)
         margin = 40  # Space between photos
         height = round((self.h - others[0].h) / 2)
@@ -80,6 +87,7 @@ class Image:
 class GalleryRequest:
     # Constructs a request containing a list of images.
     def __init__(self, nft_imgs, background_img=None):
+        assert(nft_imgs != None)
         self.nft_imgs = nft_imgs
         self.background_img = background_img
 

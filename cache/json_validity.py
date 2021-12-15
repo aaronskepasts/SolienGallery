@@ -12,6 +12,7 @@ Return codes:
 """
 
 def write_invalid_output(error):
+    assert(error != None)
     out_file_name = "invalid" + str(time.strftime("%Y-%m-%d")) + ".txt"
     with open(out_file_name, 'a') as out_file:
         out_file.write(error + '\n')

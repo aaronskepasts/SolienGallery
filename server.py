@@ -41,6 +41,7 @@ error_message_code_map = [
 
 # Returns the error code corresponding to the exception.
 def get_error_code(ex):
+    assert(ex != None)
     ex_str = str(ex)
     for (err_message, err_code) in error_message_code_map:
         if err_message == ex_str:
@@ -50,6 +51,7 @@ def get_error_code(ex):
 
 # Returns the error message corresponding to the code.
 def get_error_message(code):
+    assert(code != None)
     for (err_message, err_code) in error_message_code_map:
         if err_code == code:
             return err_message
@@ -60,6 +62,8 @@ def get_error_message(code):
 
 # Helper function to format the details of a background task in JSON.
 def format_task_details(status, response):
+    assert(status != None)
+    assert(response != None)
     return jsonify({"status": status, "response": response})
 
 #-----------------------------------------------------------------------
@@ -70,6 +74,7 @@ def format_task_details(status, response):
 def index():
     try:
         html = render_template(frontend_path + "index.html")
+        assert(html != None)
         return make_response(html)
 
     except Exception as ex:
@@ -82,6 +87,7 @@ def index():
 
 # Returns the exception encountered while executing the given job.
 def get_exception(job):
+    assert(job != None)
     exc_keyword = "Exception: "
     exc_index = job.exc_info.rindex(exc_keyword)
     return job.exc_info[exc_index + len(exc_keyword):].strip()
@@ -89,6 +95,8 @@ def get_exception(job):
 # Returns the status of the job with the given ID.
 @app.route("/status/<string:page>/<string:job_id>", methods=["GET"])
 def job_status(page, job_id):
+    assert(page != None)
+    assert(job_id != None)
     try:
         job = q.fetch_job(job_id)
         if not job:
@@ -114,6 +122,8 @@ def job_status(page, job_id):
 # Renders and returns the loading page.
 @app.route("/loading/<string:page>/<string:job_id>", methods=["GET"])
 def loading(page, job_id):
+    assert(page != None)
+    assert(job_id != None)
     try:
         job = q.fetch_job(job_id)
         html = render_template(frontend_path + "loading.html",
@@ -131,6 +141,7 @@ def loading(page, job_id):
 # Returns the ID of the background task querying for the given wallet.
 @app.route("/enqueue_search/<string:wallet>", methods=["GET"])
 def enqueue_search(wallet):
+    assert(wallet != None)
     try:
         search_req = SearchRequest(wallet)
         job = q.enqueue(search, search_req)
@@ -145,6 +156,7 @@ def enqueue_search(wallet):
 # Renders and returns the gallery builder page.
 @app.route("/gallery/<string:id_strs>", methods=["GET"])
 def gallery(id_strs):
+    assert(id_strs != None)
     try:
         imgs = [ipfs_url + img_id for img_id in id_strs.split("=")]
         html = render_template(frontend_path + "gallery.html",
@@ -162,6 +174,8 @@ def gallery(id_strs):
 
 # Creates a gallery from the specified image IDs and background.
 def get_gallery(id_strs, color, bg_url, bg_type):
+    assert(id_strs != None)
+    assert(bg_type != None)
     imgs = []
     for img_id in id_strs.split("="):
         img_url = ipfs_url + img_id
@@ -184,6 +198,7 @@ def get_gallery(id_strs, color, bg_url, bg_type):
 # Returns the ID of the background task creating the given gallery.
 @app.route("/enqueue_gallery/<string:id_strs>", methods=["GET"])
 def enqueue_gallery(id_strs):
+    assert(id_strs != None)
     try:
         color = request.cookies.get("color")
         bg_url = request.cookies.get("backgroundImage")
@@ -200,6 +215,7 @@ def enqueue_gallery(id_strs):
 # Renders and returns the download page.
 @app.route("/download/<string:id_strs>", methods=["GET"])
 def download(id_strs):
+    assert(id_strs != None)
     try:
         img_ids = id_strs.split("=")
         img_url = ("http://res.cloudinary.com/dskvzlrpw/image/upload/" + 

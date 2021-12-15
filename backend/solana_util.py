@@ -19,6 +19,7 @@ class SolanaNFT:
 class SearchRequest:
 	# Constructs a request containing a wallet.
 	def __init__(self, wallet):
+		assert(wallet != None)
 		self.wallet = wallet
 
 #-----------------------------------------------------------------------
@@ -27,6 +28,7 @@ class SearchRequest:
 class SearchResponse:
 	# Constructs a response containing a list of NFT objects.
 	def __init__(self, nft_list):
+		assert(nft_list != None)
 		self.nft_list = nft_list
 
 	# Serializes object to a JSON formatted string.

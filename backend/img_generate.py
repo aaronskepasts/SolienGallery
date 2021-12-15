@@ -4,6 +4,7 @@ from .img_util import GalleryResponse, Image
 
 # Generates a gallery from a GalleryRequest and returns its URL.
 def generate_gallery(request):
+    assert(request != None)
     # Parse the request.
     nft_imgs = request.get_nft_imgs()
     background_img = request.get_background_img()

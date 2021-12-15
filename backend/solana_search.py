@@ -18,6 +18,7 @@ BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 
 # Helper function to parse errors.
 def parse_err(ex):
+	assert(ex != None)
 	err_message = "A server error has occurred."
 	if "run out" in ex:
 		err_message = "Cannot process call to blockchain."
@@ -33,8 +34,9 @@ def parse_err(ex):
 
 # Helper function to filter out non-Solien NFTs.
 def query_soliens(nft_addresses):
+	assert(nft_addresses != None)
 	with open('cache/solien_addresses.json') as solien_address:
-	    soliens = json.load(solien_address)
+		soliens = json.load(solien_address)
 	solien_addresses = [nft for nft in nft_addresses if nft in soliens]
 	return solien_addresses
 
@@ -42,6 +44,7 @@ def query_soliens(nft_addresses):
 
 # get data (with image field) given metadata
 def get_data_from_url(data_url):
+    assert(data_url)
     with urllib.request.urlopen(data_url) as url:
         data = json.loads(url.read().decode())
         return(data)
@@ -50,6 +53,7 @@ def get_data_from_url(data_url):
 
 # Returns the NFTs owned by the wallet in a given SearchRequest.
 def search(request):
+	assert(request != None)
 	# Retrieve the NFTs from the given wallet.
 	try:
 		# Hard-coded test error.
