@@ -6,11 +6,13 @@
    function redirectPage(job_id) {
       window.location.href = "/loading/gallery/" + job_id;
    }
-
+   
    // Enqueues a blockchain search.
-   function enqueueSearch() {
+   function enqueueSearch(example = false) {
       let wallet = $("#wallet")[0].value;
-      if (!wallet) { return; }
+      if (!wallet && example) { 
+         wallet = "2AEkLQykmpM2ABPDYH1VNgQnSBiX3LQek8kox2SPhzZ2"
+      } else { return; }
 
       let reqUrl = "/enqueue_search/" + wallet;
       $.ajax({
@@ -57,6 +59,7 @@
             </tr>
          </table>
       </center>
+      <td><button onclick="enqueueSearch(true)">Try an example wallet</button></td>
       <br>
       <br>
       <h4>About Us</h4>
