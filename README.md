@@ -2,7 +2,7 @@
 
 To learn more about this project, please read the doumentation in the documentation folder.
 
-If you're interested in the project at large read checkout the ProjectOverview. If you're interested in the system and design, take a look at the ProgrammersGuide.
+If you're interested in the project at large checkout the ProjectOverview. If you're interested in the system and design, take a look at the ProgrammersGuide.
 
 ## Instructions to run `runserver.py`
 
