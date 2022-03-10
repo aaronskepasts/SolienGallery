@@ -1,5 +1,7 @@
 # Solien Gallery
 
+View live project on Heroku here: http://sol333.herokuapp.com/
+
 To learn more about this project, please read further in the documentation folder.
 
 If you're interested in the project at large checkout the ProjectOverview. If you're interested in the system and design, take a look at the ProgrammersGuide.
