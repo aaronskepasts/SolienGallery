@@ -24,7 +24,7 @@ def main():
 
     except Exception as ex:
         print(ex, file=stderr)
-        exit(1)
+        exit(1) 
 
 #-----------------------------------------------------------------------
 
