@@ -78,7 +78,7 @@ def search(request):
 
 		# Retrieve the NFTs in wallet via a call to the Blockchain API.
 		# Example wallet public_key:
-		#    "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (Aaron's Wallet)
+		#   "Kycg1YrNJ9ezMBErReAJJmHWVtVCaYEdvJbMBC1xhvm"  (Aaron's Wallet)
 
 		public_key = request.wallet
 		nft_addresses = BLOCKCHAIN_API_RESOURCE.get_nfts_belonging_to_address(
