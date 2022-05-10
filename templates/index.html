@@ -8,12 +8,19 @@
    }
    
    // Enqueues a blockchain search.
-   function enqueueSearch(example = false) {
-      let wallet = $("#wallet")[0].value;
-      if (!wallet && example) { 
-         wallet = "2AEkLQykmpM2ABPDYH1VNgQnSBiX3LQek8kox2SPhzZ2"
-      } else { return; }
+   function enqueueSearch(example = false, note) {
 
+      if(note == true){
+         alert("Blockchain querey feature is under maintenance. Please try your wallet again later. You will be redirected to an example wallet.")
+      }
+
+      let wallet = "aaron" //$("#wallet")[0].value;
+      /*
+      if (!wallet && !example) { 
+         wallet = "2AEkLQykmpM2ABPDYH1VNgQnSBiX3LQek8kox2SPhzZ2"
+      } else { //return; 
+      }
+      */
       let reqUrl = "/enqueue_search/" + wallet;
       $.ajax({
          type: "GET",
@@ -55,11 +62,11 @@
             <tr>
                <td><br><input type="text" id="wallet" placeholder="Enter Wallet Address..."></td>
                <td style="padding: 10px"></td>
-               <td><button onclick="enqueueSearch()">Search</button></td>
+               <td><button onclick="enqueueSearch(false, true)">Search</button></td>
             </tr>
          </table>
       </center>
-      <td><button onclick="enqueueSearch(true)">Try an example wallet</button></td>
+      <td><button onclick="enqueueSearch(true, false)">Try an example wallet</button></td>
       <br>
       <br>
       <h4>About Us</h4>
