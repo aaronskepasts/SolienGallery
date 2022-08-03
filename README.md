@@ -1,11 +1,8 @@
 # Solien Gallery
 
-Ths project is a web app to make a gallery of your Solien NFTs from the Solana blockchain. To learn more about this project, please read further in the documentation folder.
-
 View live project on Heroku here: http://sol333.herokuapp.com/
 
-
-If you're interested in the project at large checkout the ProjectOverview. If you're interested in the system and design, take a look at the ProgrammersGuide.
+Ths project is a web app to make a gallery of your Solien NFTs from the Solana blockchain. To learn more about this project, please read further in the documentation folder. If you're interested in the project at large checkout the ProjectOverview. If you're interested in the system and design, take a look at the ProgrammersGuide.
 
 ## Instructions to run `runserver.py`
 
