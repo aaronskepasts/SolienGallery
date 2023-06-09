@@ -1,6 +1,6 @@
 # Solien Gallery
 
-View live project on Heroku here: http://sol333.herokuapp.com/
+View live project on Heroku here: https://soliengallery.herokuapp.com/
 
 ## The Project
  
