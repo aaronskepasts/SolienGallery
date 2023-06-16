@@ -28,12 +28,7 @@ https://redis.io/ <br />
 Windows users should follow this tutorial: https://redis.com/blog/redis-on-windows-10/. Unfortunately, it's a little tedious and requires WSL. 
 
 ### Run the following commands in terminal:
-`pip install cloudinary` <br />
-`pip install flask` <br />
-`pip install imageio` <br />
-`pip install pillow` <br />
-`pip install rq` <br />
-`pip install theblockchainapi`
+`pip install -r requirements.txt`
 
 ### Run the server:
 `redis-server`

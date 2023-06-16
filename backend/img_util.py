@@ -10,8 +10,8 @@ import requests
 # Cloudinary configuration.
 cloudinary.config( 
   cloud_name = "dskvzlrpw", 
-  api_key = "126823135136982", 
-  api_secret = "fYxRRjhC4_C2GVteU65f_QRKh94" 
+  api_key = "YOURK KEY HERE", 
+  api_secret = "YOUR KEY HERE" 
 )
 
 #-----------------------------------------------------------------------

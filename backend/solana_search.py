@@ -6,9 +6,9 @@ import urllib.request
 
 #-----------------------------------------------------------------------
 
-# Blockchain API key pair
-MY_API_KEY_ID = "pMHP8YsDR1EeXhf"
-MY_API_SECRET_KEY = "I3VNE5S4vYa1QuX"
+# Blockchain API key pair (keep thease secret)
+MY_API_KEY_ID = "YOUR KEY HERE"
+MY_API_SECRET_KEY = "YOUR KEY HERE"
 BLOCKCHAIN_API_RESOURCE = TheBlockchainAPIResource(
 	api_key_id=MY_API_KEY_ID,
 	api_secret_key=MY_API_SECRET_KEY
@@ -61,20 +61,20 @@ def search(request):
 			raise Exception("Error Message.[test]")
 
 		# Hard-coded test wallet.
-		request.wallet == "aaron"
-		nft_list = []
-		address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
-		metadata = {
-			"image": "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
-			"data": {
-				"name": "Solien #582",
-				"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
-				"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+		if request.wallet == "aaron":
+			nft_list = []
+			address = "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+			metadata = {
+				"image": "https://ipfs.io/ipfs/QmXiDcEu27TeBo2seYDuy81xtKmeYk3QUtjinNEnhpgReU",
+				"data": {
+					"name": "Solien #582",
+					"uri": "https://ipfs.io/ipfs/QmSTf4BPk56ozEFwDotw18Zg79Ku6Cm7GjuQmB27pGwrsm",
+					"mint": "FN8EXxCE8Nty5h6iNtfdN8tqmCwFYiSuM6j8bLa9Uc5h"
+				}
 			}
-		}
-		for i in range(10):
-			nft_list.append(SolanaNFT(address, metadata))
-		return SearchResponse(nft_list)
+			for i in range(10):
+				nft_list.append(SolanaNFT(address, metadata))
+			return SearchResponse(nft_list)
 
 		# Retrieve the NFTs in wallet via a call to the Blockchain API.
 		# Example wallet public_key:
